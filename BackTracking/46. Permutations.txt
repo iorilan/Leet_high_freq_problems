@@ -1,0 +1,12 @@
+def permute(self, nums: List[int]) -> List[List[int]]:
+    res = []
+    def perm(nums, cur):
+        if not nums:
+            res.append(cur[:])
+            return
+        # loop through the array pick every number then remove it from list
+        # repeat the process
+        for i in range(0, len(nums)):
+            perm(nums[:i]+nums[i+1:], cur+[nums[i]]) # be mindful the state sharing here
+    perm(nums, [])
+    return res

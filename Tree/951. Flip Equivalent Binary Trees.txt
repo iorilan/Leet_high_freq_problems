@@ -1,0 +1,24 @@
+def flipEquiv(self, root1: Optional[TreeNode], root2: Optional[TreeNode]) -> bool:
+    def get_val(n):
+        if not n:
+            return -1
+        return n.val
+    def swap(n):
+        t = n.left
+        n.left = n.right
+        n.right = t
+    def check(n1, n2):
+        if not n1:
+            return not n2
+        if not n2:
+            return not n1
+        if n1.val != n2.val:
+            return False
+        l1, l2, r1, r2 = get_val(n1.left),get_val(n1.right),get_val(n2.left),get_val(n2.right)
+        if l1 == r1 and l2 == r2:
+            return check(n1.left, n2.left) and check(n1.right, n2.right)
+        if l1 == r2 and l2 == r1:
+            swap(n1)
+            return check(n1.left, n2.left) and check(n1.right, n2.right)
+        return False
+    return check(root1, root2)

@@ -1,0 +1,39 @@
+from collections import defaultdict
+class Solution:
+    def numSubarraysWithSum(self, nums: List[int], goal: int) -> int:
+        """
+        Sample :
+        goal 2
+             1 0 1 0 1 0 0 1 0 1
+           0 1 1 2 2 3 3 3 4 4 5    # pre_sum
+           <----->+pre_sum[0]       # index =2
+           <-------> +pre_sum[0]    # index =3
+               <-----> +pre_sum[1]  # index =4
+             <------->
+             <---------> +pre_sum[1]# index =5 
+               <------->
+             <-----------> +pre_sum[1]
+               <--------->
+               ...
+        goal 2
+         1 0 1 0 1 0 0 1 0 1
+           0 1 1 2 2 3 3 3 4 4 5    # pre_sum = {sum:count}
+                 +pre_sum[0]
+                   +pre_sum[0]
+                     +pre_sum[1]
+                       +pre_sum[1]
+                         +pre_sum[1]
+                           +pre_sum[2]
+                             +pre_sum[2]
+                               +pre_sum[3]
+        """
+        pre_sum = defaultdict(int) # count[current_sum]
+        pre_sum[0]=1
+        res = 0
+        s = 0
+        for n in nums:
+            s += n
+            if s-goal in pre_sum:
+                res += pre_sum[s-goal]
+            pre_sum[s] += 1
+        return res

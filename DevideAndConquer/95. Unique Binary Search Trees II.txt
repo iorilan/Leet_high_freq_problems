@@ -1,0 +1,21 @@
+def generateTrees(self, n: int) -> List[Optional[TreeNode]]:
+    def gen(left, right):
+        nonlocal n
+        if left > right :
+            return [None]
+        
+        trees=[]
+        for i in range(left, right+1):
+            # use every node as root
+            l_tree=gen(left, i-1)
+            r_tree=gen(i+1, right)
+            # add each combination of left and tree sub tree
+            for l in l_tree:
+                for r in r_tree:
+                    root = TreeNode(i)
+                    root.left = l
+                    root.right = r
+                    trees.append(root)
+        return trees
+    
+    return gen(1, n)

@@ -1,0 +1,26 @@
+def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+    """
+        do a binary search on the first column values
+        Case1 : landed first row, it must be first value. else target < first element. False
+        Case2 : landed last row, do another binary search on last row values
+        Case3 : matched with some value
+        Case4 : land in certain row. do binary search on that row
+    """
+    row, col = len(matrix), len(matrix[0])
+    first_col = [matrix[r][0] for r in range(0, row)]
+    
+    r = bisect.bisect_left(first_col, target)
+    if r == 0:
+        return matrix[0][0] == target
+    elif r == row:
+        r = row - 1
+    elif matrix[r][0] == target:
+        return True
+    elif matrix[r][0] > target:
+        r -= 1
+        
+    c = bisect.bisect_left(matrix[r], target)
+    if c == col:
+        return target == matrix[r][c-1]
+    
+    return matrix[r][c] == target

@@ -1,0 +1,23 @@
+def minEatingSpeed(self, piles: List[int], h: int) -> int:
+    """
+        For piles=[30, 11, 23, 4, 20] , h=6:
+        min hours = sum(piles)/h = 15, max hours= max(piles) = 30
+        so hours within : [15,16, ..29, 30]
+        15, 16,..22.......29, 30
+        |         |            |
+      low        mid         high
+ #1    23         26         30  ,hours=7 # try eat less, high = mid
+ #2    23         24         26  ,hours=6 # try eat less, high = mid
+ #3    23         23         24  ,hours=6 # try eat less, high = mid
+ #4    24                    24  , END
+    """
+    lo, hi = math.ceil(sum(piles)/h) , max(piles)
+    while lo < hi:
+        mid = lo + (hi-lo)//2
+        hours = sum(math.ceil(p/mid) for p in piles)
+        if hours > h:
+            lo = mid+1
+        else :
+            hi = mid
+        
+    return lo

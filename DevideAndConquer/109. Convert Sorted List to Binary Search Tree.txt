@@ -1,0 +1,17 @@
+def sortedListToBST(self, head: Optional[ListNode]) -> Optional[TreeNode]:
+    # convert linklist to array
+    arr = []
+    while head:
+        arr.append(head.val)
+        head=head.next
+    
+    # find the mid node index,use it as root. repeat the same for left and right node
+    def build(arr):
+        if not arr:
+            return None
+        idx=len(arr)//2
+        r = TreeNode(arr.pop(idx))
+        r.left = build(arr[:idx])
+        r.right = build(arr[idx:])
+        return r
+    return build(arr)

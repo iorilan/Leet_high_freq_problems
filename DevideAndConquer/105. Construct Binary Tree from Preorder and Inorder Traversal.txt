@@ -1,0 +1,27 @@
+def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
+    """
+        first element in preorder is the root
+        the find the root's index in inorder. [left], [right] will be the sub trees
+        Sample :
+        [3 9 20 15 7] [9 3 15 20 7]
+                    3       
+              /             \
+        [9] [9]            [20 15 7] [15 20 7]
+          /                     20
+        9                      /  \
+                            [15]   [7]
+                            /       \
+                          15        7
+    """
+    def build(p, i):
+        if not p:
+            return None 
+        r = TreeNode(val=p.pop(0))
+        
+        idx = i.index(r.val)
+        
+        r.left = build(p[:idx], i[:idx+1])
+        r.right = build(p[idx:], i[idx+1:])
+        return r
+    
+    return build(preorder, inorder)

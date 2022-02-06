@@ -1,0 +1,15 @@
+class Solution:
+    def lenLongestFibSubseq(self, arr: List[int]) -> int:
+        res = 0
+        nums = set(arr)
+        def fib(pre, nxt, l):
+            nonlocal res
+            if l > 2 and l > res:
+                res = l
+            if pre+nxt in nums:
+                fib(nxt, pre+nxt, l+1)
+            
+        for i in range(len(arr)):
+            for j in range(i+1, len(arr)):
+                fib(arr[i], arr[j], 2)
+        return res

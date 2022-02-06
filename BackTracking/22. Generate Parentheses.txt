@@ -1,0 +1,23 @@
+def generateParenthesis(self, n: int) -> List[str]:
+    """
+        generate from empty string count left and right parentheses
+        when left > right: (() . now can append left or right 
+        when left = right: (). now can only append left
+        when left < right: ()). already invalid. can not proceed
+    """
+    res=[]
+    def generate(s, left, right, n):
+        if left>n or right > n:
+            return
+        if left == right:
+            if left == n:
+                res.append(s)
+                return 
+            # can only generate left
+            generate(s+'(', left+1, right, n)
+        elif left > right:
+            # can append either left or right
+            generate(s+'(', left+1, right, n)
+            generate(s+')', left, right+1, n)
+    generate('', 0, 0, n)
+    return res

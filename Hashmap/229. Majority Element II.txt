@@ -1,0 +1,8 @@
+def majorityElement(self, nums: List[int]) -> List[int]:
+    if len(nums)< 3:
+        return list(set(nums))
+    
+    l = len(nums)/3
+    wc = collections.Counter(nums)
+    res = [w for w, v in wc.items() if v > l]
+    return res

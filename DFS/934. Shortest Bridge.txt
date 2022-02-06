@@ -1,0 +1,42 @@
+class Solution:
+    def shortestBridge(self, grid: List[List[int]]) -> int:
+        row, col = len(grid), len(grid[0])
+        
+        # use DFS find the first island
+        def island(r, c, row, col):
+            if r < 0 or c < 0 or r ==row or c == col or grid[r][c] != 1 :
+                return []
+            grid[r][c] = 2
+            return [(r,c)] + island(r-1, c, row, col) \
+                           + island(r+1, c, row, col) \
+                           + island(r, c-1, row, col) \
+                           + island(r, c+1, row, col)
+        r = 0
+        while r < row:
+            for c in range(col):
+                if grid[r][c] == 1:
+                    q = island(r,c, row, col)
+                    r = row
+                    break
+            r+=1
+
+        # use BFS count steps to reach the 2nd island (start with every node on 1st island)
+        steps = 0
+        while q :
+            nexts = []
+            while q :
+                r,c = q.pop(0)
+                dirs = [(-1,0), (0,1), (1,0), (0,-1)]
+                for x,y in dirs:
+                    r1,c1 = r+x, c+y
+                    if r1 < 0 or c1 < 0 or r1 == row or c1 == col or grid[r1][c1]==2:
+                        continue
+                    v = grid[r1][c1]
+                    if v == 1:
+                        return steps
+                    elif v == 0:
+                        grid[r1][c1] = 2
+                        nexts.append((r1, c1))
+            q = nexts
+            steps +=1
+        return steps

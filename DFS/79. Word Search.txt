@@ -1,0 +1,22 @@
+def exist(self, board: List[List[str]], word: str) -> bool:
+    row, col = len(board), len(board[0])
+    
+    def dfs(r, c, w, visited):
+        if not w:
+            return True
+        if r < 0 or c < 0 or r == row or c == col or (r,c) in visited or board[r][c] != w[0]:
+            return False
+        w=w[1:]
+        visited |= {(r,c)}
+        res = dfs(r-1, c, w, visited) or \
+            dfs(r+1, c, w, visited) or \
+            dfs(r, c+1, w, visited) or \
+            dfs(r, c-1, w, visited)
+        visited -= {(r,c)} # restore state for another dfs path
+        return res
+        
+    for r in range(0, row):
+        for c in range(0, col):
+            if dfs(r, c, word, set()):
+                return True
+    return False

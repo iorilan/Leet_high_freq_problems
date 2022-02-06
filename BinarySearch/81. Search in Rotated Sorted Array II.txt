@@ -1,0 +1,17 @@
+def search(self, nums: List[int], target: int) -> bool:
+    pivot = -1
+    for i in range(len(nums) - 1):
+        if nums[i]>nums[i+1]:
+            pivot = i
+            break
+    if pivot == -1: # it is not rotate
+        idx = bisect_left(nums, target)
+        return idx < len(nums) and nums[idx] == target
+    if target >= nums[0]: # search in [0, pivot]
+        arr = nums[:pivot+1]
+        idx = bisect_left(arr, target)
+        return idx < len(arr) and arr[idx] == target
+    else: # search in [pivot+1, end]
+        arr = nums[pivot+1:]
+        idx = bisect_left(arr, target)
+        return idx < len(arr) and arr[idx] == target

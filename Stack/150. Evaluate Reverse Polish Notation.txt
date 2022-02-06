@@ -1,0 +1,19 @@
+def evalRPN(self, tokens: List[str]) -> int:
+    stack = []
+    def calc(o1, o2, p):
+        if p == '+':
+            return o1+o2
+        elif p == '-':
+            return o1-o2
+        elif p == '*':
+            return o1*o2
+        else:
+            return math.trunc(o1/o2)
+
+    for t in tokens:
+        if t not in ['+','-','*','/']:
+            stack.append(int(t))
+        else:
+            op2, op1 = stack.pop(-1), stack.pop(-1)
+            stack.append(calc(op1, op2, t))
+    return stack.pop()

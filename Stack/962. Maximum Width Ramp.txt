@@ -1,0 +1,10 @@
+def maxWidthRamp(self, nums: List[int]) -> int:
+    s = []
+    for i,n in enumerate(nums):
+        if not s or nums[s[-1]] > n:
+            s.append(i)
+    res = 0
+    for i in range(len(nums)-1, -1, -1):
+        while s and nums[s[-1]] <= nums[i]:
+            res = max(res, i-s.pop())
+    return res

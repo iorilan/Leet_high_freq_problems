@@ -1,0 +1,11 @@
+def rob(self, root: Optional[TreeNode]) -> int:
+    def ro(n):
+        if not n :
+            return 0, 0
+        l1, l2 = ro(n.left) #l1: take, l2: did not take
+        r1, r2 = ro(n.right)
+        # Case1 : take current horse, did not take left and right horse
+        # Case2 : skip current horse, best of (left, right)
+        v1, v2 = n.val+l2+r2, max(l1,l2)+max(r1, r2)
+        return v1,v2
+    return max(ro(root))

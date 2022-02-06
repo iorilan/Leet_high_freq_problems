@@ -1,0 +1,29 @@
+1. Heap
+def kthSmallest(self, matrix: List[List[int]], k: int) -> int:
+    """
+        Heap+BFS 
+        start from the left top position.
+        every time pop and push right and below value into heap, track visited
+    """
+    res, arr = None, []
+    heapq.heappush(arr, (matrix[0][0],0,0)) # start with left top
+    visited = set()
+    row, col = len(matrix), len(matrix[0])
+    while k > 0:
+        res , r, c = heapq.heappop(arr)
+        if (r,c) in visited:
+            continue
+        visited.add((r,c))
+        if c < col-1:                       # push right value
+            heapq.heappush(arr, (matrix[r][c+1], r, c+1))
+        if r < row-1:                       # push below value
+            heapq.heappush(arr, (matrix[r+1][c], r+1, c))
+        k -= 1
+    return res
+
+2. Convert to 1D array and sort
+def kthSmallest(self, matrix: List[List[int]], k: int) -> int:
+    arr = []
+    for m in matrix:
+        arr.extend(m)
+    return sorted(arr)[k-1]

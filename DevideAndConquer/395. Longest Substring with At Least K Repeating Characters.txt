@@ -1,0 +1,14 @@
+def longestSubstring(self, s: str, k: int) -> int:
+    @cache
+    def max_split(s, k):
+        wc = Counter(s)
+        res = 0
+        split_chars = [c for c,v in wc.items() if v < k]
+        if not split_chars:
+            return len(s)
+        res = 0
+        for c in split_chars:
+            parts = s.split(c)  # s='aabcbd',c='b' parts=['aa','c','d']
+            res = max(res, max(max_split(p, k) for p in parts) ) # try every part, take the max
+        return res
+    return max_split(s, k)

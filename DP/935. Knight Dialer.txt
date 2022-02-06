@@ -1,0 +1,29 @@
+class Solution:
+    def knightDialer(self, n: int) -> int:
+        """
+            Solution1 DFS+cache
+            
+            Solution2 DP:
+            b - c
+            - - -
+            - a -
+            1.get result[a][1], result[b][1], result[c][1]
+            2.result[a][2] = result[b][1] + result[c][1]
+            ...
+            result[a][n] = result[b][n-1]+result[c][n-1]
+        """
+        mapping = {0:(4,6),1:(6,8),2:(7,9),3:(4,8),4:(3,9,0),6:(1,7,0),7:(2,6),8:(1,3),9:(2,4)}
+        @cache
+        def path(x, l): # x: current number, l :length
+            nonlocal mapping, n
+            if l == n:
+                return 1
+            nexts = mapping.get(x, [])
+            res = 0
+            for n1 in nexts:
+                res+=path(n1, l+1)
+            return res
+        result = 0
+        for i in range(0, 10):
+            result += path(i,1)
+        return result % (pow(10,9)+7)

@@ -1,0 +1,18 @@
+def removeDuplicateLetters(self, s: str) -> str:
+    wc = collections.Counter(s)
+    arr = []
+    for c in s:
+        if not arr:
+            arr.append(c)
+            wc[c]-=1
+            continue
+        if arr[-1] < c:
+            if c not in arr:
+                arr.append(c)
+        elif arr[-1] > c:
+            if c not in arr:
+                while arr and arr[-1] >= c and wc[arr[-1]] > 0:
+                    arr.pop()
+                arr.append(c)
+        wc[c]-=1
+    return ''.join(arr)

@@ -1,0 +1,20 @@
+def allPossibleFBT(self, n: int) -> List[Optional[TreeNode]]:
+    @cache
+    def build(n):
+        if n % 2 == 0: # only odd number could be full tree
+            return []
+        if n == 1:
+            return [TreeNode(0)]
+        root = []
+        for i in range(1,n):
+            lefts = build(i) # left all possible nodes
+            rights = build(n-i-1) # right all possible nodes
+            for l in lefts:
+                for r in rights:
+                    x = TreeNode(0)
+                    x.left = l
+                    x.right = r
+                    root.append(x)
+        return root
+    res = build(n)
+    return res

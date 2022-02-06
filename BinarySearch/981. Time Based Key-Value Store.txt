@@ -1,0 +1,18 @@
+import bisect
+from collections import defaultdict
+class TimeMap:
+		
+	def __init__(self):
+		self.arr = defaultdict(list)
+	
+	def set(self, key: str, value: str, timestamp: int) -> None:
+		self.arr[key].append((timestamp, value))
+	
+	def get(self, key: str, timestamp: int) -> str:
+		if key not in self.arr:
+			return ''
+		vals = self.arr[key]
+		idx = bisect.bisect_left(vals, (timestamp, chr(127)))
+		if idx > 0:
+			return vals[idx-1][1]
+		return ''

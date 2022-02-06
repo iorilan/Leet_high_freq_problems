@@ -1,0 +1,24 @@
+from collections import defaultdict
+class Solution:
+    def possibleBipartition(self, n: int, dislikes: List[List[int]]) -> bool:
+        # get {person : [dislike]}
+        arr = defaultdict(list)
+        for d1, d2 in dislikes:
+            arr[d1].append(d2)
+            arr[d2].append(d1)
+        
+        group = {} # {person : group_id}
+        def dfs(cur, g):
+            nonlocal group
+            if cur in group:
+                return group[cur] == g # already assigned group, check if it is same as expected
+            group[cur] = g
+            nexts = arr.get(cur, [])
+            for n1 in nexts:
+                if not dfs(n1, -g): # try assign his dislike to another group
+                    return False
+            return True
+        for i in range(1, n+1):
+            if not dfs(i, group.get(i, 1)): # if he(also his dislike) no group yet, assign to first group
+                return False
+        return True

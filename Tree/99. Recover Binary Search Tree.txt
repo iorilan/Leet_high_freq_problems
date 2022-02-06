@@ -1,0 +1,20 @@
+def recoverTree(self, root: Optional[TreeNode]) -> None:
+    """
+        Think about this :
+        There is a sorted array, 2 numbers has been swap . find out the 2 numbers
+        1. will loop through the array find the first and 2nd nums[i]>=nums[i+1]
+        2. swap them
+        when come to tree, inorder means sorted
+    """
+    self.first, self.second, self.prev = None, None, TreeNode(float('-inf')) 
+    def inorder(node):
+        if node:
+            inorder(node.left)
+            if self.prev.val >= node.val:
+                if not self.first:
+                    self.first = self.prev
+                self.second = node
+            self.prev = node
+            inorder(node.right)
+    inorder(root)
+    self.first.val, self.second.val = self.second.val, self.first.val

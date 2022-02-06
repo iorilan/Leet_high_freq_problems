@@ -1,0 +1,29 @@
+def threeSumClosest(self, nums: List[int], target: int) -> int:
+    """ 
+        Explaination :
+        <-sorted(array)->
+        |--|------------|
+      left mid        right 
+      3 sum = left+mid+right
+      when 3sum > target:
+      right-1 (left+1 or mid+1 will make it even bigger)
+      else :will try mid+1 (left+1 case is covered in outside loop)
+    """
+    nums = sorted(nums)
+    l,m,r = 0, 1, len(nums)-1
+    res = nums[l]+nums[m]+nums[r]
+    while l < len(nums)-1:
+        m = l+1
+        r = len(nums)-1
+        t = nums[l]+nums[m]+nums[r]
+            
+        while m < r:
+            three_sum = nums[l]+ nums[m] +nums[r]
+            if abs(three_sum-target) < abs(res-target):
+                res = three_sum
+            if three_sum > target:
+                r -= 1
+            else:
+                m += 1
+        l += 1
+    return res

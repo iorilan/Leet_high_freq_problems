@@ -1,0 +1,30 @@
+def mincostTickets(self, days: List[int], costs: List[int]) -> int:
+	"""
+		Think about today . there will be only 3 cases , could come from yesterday , 
+		any date within this week, or any date within this month:
+		...30...........7.......yesterday, today....
+		  |           |          |---------->
+		  |           |   best[yesterday]+cost[0]
+		  |           |
+		  |    best[8 day ago]+cost[1]------>
+		  |--------------------------------->            
+	best[31 day ago] + cost[2]
+	"""
+	def days_ago(idx, days, ago):
+		res=start = idx
+		while start >=1 and days[idx]-days[start]<ago:
+			res = start
+			start -= 1
+		return res
+	days = [0]+days # handle edge case of first day
+	best = len(days)*[0]
+	cheap = min(costs)
+	for i in range(1, len(days)):
+		# get the earlist date could travel using week or month pass
+		week, month = days_ago(i, days,7), days_ago(i,days,30)
+		best[i] = best[i-1]+cheap # buy a cheapest ticket today
+		if week < i: # the ticket could cover one week, no need to pay the 'week' date itself
+			best[i] = min(best[i], best[week-1]+costs[1]) # come from day within this week
+		if month < i:
+			best[i] = min(best[i], best[month-1]+costs[2]) # come from day within this month
+	return best[-1]

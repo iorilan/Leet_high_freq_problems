@@ -1,0 +1,24 @@
+def maxProduct(self, nums: List[int]) -> int:
+    """
+        Track the minimum and maximum while looping each number
+        either minimum or maximum * n could become maximum
+    Sample :
+        2 3 0 -2  4  -3  4   -5    4
+    min 2 3 0 -2 -8 -12 -48  -480  -1920
+    max 2 6 0  0  4  24  96   240   960
+    res 2 6 6  6  6  24  96   240   960
+    """
+    _min = 1
+    _max = 1
+    res = None
+    for n in nums:
+        m1, m2 = _min, _max
+        _min = min(m1 *n, m2*n, n)
+        _max = max(m1 *n, m2*n, n)
+        print(_min, _max)
+        if not res:
+            res = _max
+        else:
+            res = max(_max, res)
+
+    return res

@@ -1,0 +1,16 @@
+def subarrayBitwiseORs(self, arr: List[int]) -> int:
+    """
+    cur 1       2       3        4           5             11
+    pre []      [1]     [2,3]    [3]         [4,7]         [5,7]
+cur|pre [1]     [1,2,3] [2,3]    [4,7]       [5,7]         [11,15]
+    res [1]     [1,2,3] [1,2,3]  [1,2,3,4,7] [1,2,3,4,5,7] [1,2,3,4,5,7,11,15]
+    """
+    res= set()
+    pre = set() # to store same value for | operation
+    for a in arr:
+        cur = {a}
+        for p in pre:
+            cur.add(a|p)
+        res |= cur
+        pre = cur
+    return len(res)

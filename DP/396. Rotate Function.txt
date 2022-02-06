@@ -1,0 +1,19 @@
+def maxRotateFunction(self, nums: List[int]) -> int:
+    s=sum(nums)
+    """
+    nums=[a,b,c,d]
+    S=a+b+c+d
+    f0=0+b+2c+3d
+    f1=a+2b+3c+0 -- f1-f0 = a+b+c-3d = S-4d
+    f2=2a+3b+0+d -- f2-f1 = a+b+d-3c = S-4c
+    f3=3a+0+c+2d -- f3-f2 = a+c+d-3b = S-4b
+    so ,
+    f(n)= f(n-1)+S-n*(nums[nth start from last])
+    """
+    f=[0]*len(nums)
+    f[0]=sum([i*nums[i] for i in range(0, len(nums))])
+    res=f[0]
+    for i in range(1, len(nums)):
+        f[i]=f[i-1] + s-len(nums)*(nums[-i])
+        res=max(f[i], res)
+    return res

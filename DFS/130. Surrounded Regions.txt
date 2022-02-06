@@ -1,0 +1,53 @@
+def solve(self, board: List[List[str]]) -> None:
+    """
+        for every O do DFS : up down left right search until find a X.
+        then mark all the O as X
+    """
+    def dfs(r, c, row, col, visit):
+        nonlocal board
+        if r < 0 or c< 0 or r == row or c == col:
+            return False
+        if board[r][c] == 'X' or (r,c) in visit:
+            return True
+        visit.add((r,c))
+        res = dfs(r-1,c, row, col, visit) and \
+            dfs(r+1,c, row, col, visit) and \
+            dfs(r,c-1, row, col, visit) and \
+            dfs(r,c+1, row, col, visit)
+        
+        return res
+    row, col = len(board), len(board[0])
+    for r in range(0, row):
+        for c in range(0, col):
+            v = set()
+            if board[r][c] == 'O' and dfs(r,c, row, col, v):
+                for x in v:
+                    r1,c1 = x
+                    board[r1][c1] = 'X'
+
+
+def solve(self, board: List[List[str]]) -> None:
+    """
+        1. check all borader values, DFS each O , mark the connected as A
+        2. change all O to X, A to O
+    """
+    row, col = len(board), len(board[0])
+    def mark(r, c):
+        if r < 0 or c < 0 or r == row or c == col or board[r][c] != 'O':
+            return
+        board[r][c] = 'A'
+        mark(r-1, c)
+        mark(r+1, c)
+        mark(r, c-1)
+        mark(r, c+1)
+        
+    for r in range(row):
+        for c in range(col):
+            if r in [0, row-1] or c in [0, col-1] and board[r][c]=='O':
+                mark(r, c)
+    for r in range(row):
+        for c in range(col):
+            if board[r][c] == 'O':
+                board[r][c] = 'X'
+            if board[r][c] == 'A':
+                board[r][c] = 'O'

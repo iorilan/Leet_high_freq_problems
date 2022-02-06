@@ -1,0 +1,28 @@
+class Solution:
+    def minDeletionSize(self, strs: List[str]) -> int:
+        """
+                         x   g   a
+                         x   f   b
+                         y   f   a
+      sorted[2]=1       <-   |   |
+f<g and sorted[1]=0, delete<--   |
+    a<b, but sorted[2]=1,skip<---|
+        """
+        row, col = len(strs), len(strs[0])
+        _sorted = [False]*row
+        res = 0
+        for c in range(col):
+            tmp = _sorted[:]
+            for r in range(row):
+                if r > 0:
+                    if _sorted[r]:
+                        continue
+                    if strs[r][c] > strs[r-1][c]:
+                        _sorted[r] = True
+                    elif strs[r][c] == strs[r-1][c]:
+                        continue
+                    else:
+                        _sorted = tmp
+                        res += 1
+                        break
+        return res

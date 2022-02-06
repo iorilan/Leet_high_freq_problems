@@ -1,0 +1,22 @@
+def setZeroes(self, matrix: List[List[int]]) -> None:
+    row, col = len(matrix), len(matrix[0])
+    marker = float('inf')
+    # mark entire row or col as inf first
+    # do not directly set to 0 because need to keep the original 0
+    def mark(r, c): 
+        for c1 in range(0, col):
+            if matrix[r][c1] != 0:
+                matrix[r][c1] = marker
+        for r1 in range(0, row):
+            if matrix[r1][c] != 0:
+                matrix[r1][c] = marker
+  
+    for r  in range(0, row):
+        for c in range(0, col):
+            if matrix[r][c] == 0:
+                mark(r, c)
+                
+    for r  in range(0, row):
+        for c in range(0, col):
+            if matrix[r][c] == marker:
+                matrix[r][c] = 0

@@ -1,0 +1,14 @@
+def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+    res = []
+    def comb(start, s, cur):
+        if s > target:
+            return 
+        if s == target:
+            res.append(cur)
+            return 
+        for i in range(start, len(candidates)):
+            # start from index i because every index can be used multiple times
+            comb(i, s+candidates[i], cur +[candidates[i]])
+
+    comb(0, 0, [])
+    return res

@@ -1,0 +1,27 @@
+def fourSum(self, nums: List[int], target: int) -> List[List[int]]:
+    """
+        <sorted array>
+        ijm......n
+        need = target-nums[i]+nums[j]
+        when nums[m]+nums[n] < need: m+1
+        when nums[m]+nums[n] > need :n-1
+        when need = nums[m]+nums[n], m+1 and n-1 because 
+        when [i,j,m,n]=need either [i,j,m+1,n] = need or [i,j,m,n-1]=need. 
+        the result will be duplicated as [i,j,m,n]
+    """
+    nums.sort()
+    res = set()
+    for i in range(0, len(nums)):
+        for j in range(i+1, len(nums)):
+            m, n = j+1, len(nums)-1
+            while m < n:
+                need = target-nums[i]-nums[j]
+                if nums[m]+nums[n]<need:
+                    m+=1
+                elif nums[m]+nums[n]>need:
+                    n-=1
+                else:
+                    res.add((nums[i],nums[j],nums[m],nums[n]))
+                    m+=1
+                    n-=1
+    return [list(r) for r in res]

@@ -1,0 +1,47 @@
+from collections import defaultdict
+class Solution:
+    def removeStones(self, stones: List[List[int]]) -> int:
+        """
+            [0,2]-------[2,2]
+              |   [1,1]   |
+            [0,0]-------[2,0]
+            [0,2], [2,2], [2,0], [0,0] is connected
+            [1,1] is connected
+            so there are 2 "island" . answer = 5-2 = 3
+            -------------------------
+                  [1,2]-[2,2]
+            [0,1]-------[2,1]
+            [0,0]-[1,0]
+            all nodes are connected. there is only 1 island
+            answer = 6-1=5
+            
+            Formular: answer = number of nodes - number of islands
+        """
+        arr = set()
+        x = defaultdict(set) # {x coordinate: [node]}
+        y = defaultdict(set) # [y coordinate: [node]]
+        visited = set()
+        for s in stones:
+            n = tuple(s) # convert to tuple for cache
+            arr.add(n)
+            x[s[0]].add(n)
+            y[s[1]].add(n)
+        
+        # connect the nodes into islands
+        def connect(s, x, y, visited):
+            if s in visited:
+                return
+            visited.add(s)
+            # find by x 
+            for n in x.get(s[0], []):
+                connect(n, x, y, visited)
+            # find by y
+            for n in y.get(s[1], []):
+                connect(n, x, y, visited)
+        
+        island = 0
+        for s in arr:
+            if s not in visited:
+                connect(s, x, y, visited)
+                island += 1
+        return len(stones)-island

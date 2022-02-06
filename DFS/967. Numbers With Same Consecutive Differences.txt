@@ -1,0 +1,15 @@
+def numsSameConsecDiff(self, n: int, k: int) -> List[int]:
+    res = []
+    @cache
+    def run(n, d, k, cur):
+        if d == n:
+            res.append(int(cur))
+            return
+        c = int(cur[-1])
+        if -1<c+k<10:
+            run(n, d+1, k, cur+str(c+k))
+        if -1<c-k<10:
+            run(n, d+1, k, cur+str(c-k))
+    for i in range(1, 10):
+        run(n, 1, k, str(i))
+    return res

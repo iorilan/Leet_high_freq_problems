@@ -1,0 +1,12 @@
+def distributeCoins(self, root: Optional[TreeNode]) -> int:
+    res = 0
+    def move(n):
+        nonlocal res
+        if not n :
+            return 0
+        l = move(n.left) # left total
+        r = move(n.right) # right total
+        res += abs(l)+abs(r) # left cost+right cost
+        return l+r+n.val-1 # left+right+cur total
+    move(root)
+    return res

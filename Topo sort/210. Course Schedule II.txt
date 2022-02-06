@@ -1,0 +1,17 @@
+def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+    pre = prerequisites
+    dependencies = {x:[] for x in range(0, numCourses)}
+    for x, y in pre:
+        dependencies[x].append(y)
+    res=[]
+    while dependencies :
+        sel = [x for x in dependencies.keys() if len(dependencies[x]) == 0]
+        if not sel:
+            return []
+        for c in sel:
+            res.append(c)
+            for k, v in dependencies.items():
+                if c in v:
+                    dependencies[k].remove(c)
+            del dependencies[c]
+    return res

@@ -1,0 +1,26 @@
+def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
+    devide_map = defaultdict(list)              # v1/v2 = r {v1: [v2, r]}
+    for i, v in enumerate(equations):
+        e1,e2=v
+        devide_map[e1].append((e2, values[i]))
+        devide_map[e2].append((e1, 1/values[i]))
+    
+    def q(a, b, cur, visited):
+        if (a, b) in visited:
+            return -1
+        visited.add((a,b))
+        
+        for c, r in devide_map.get(a, []):
+            if c == b :
+                return r*cur
+            res = q(c, b, cur*r, visited)
+            if res != -1:
+                return res
+        return -1
+    
+    res=[]
+    for x in queries:
+        a,b = x
+        res.append(q(a, b, 1, set()))
+    
+    return res

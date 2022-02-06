@@ -1,0 +1,15 @@
+def smallestFromLeaf(self, root: Optional[TreeNode]) -> str:
+    res = None
+    def dfs(n, cur):
+        nonlocal res
+        if not n:
+            return
+        c = chr(n.val+ord('a'))
+        if not n.left and not n.right:
+            if not res or f'{c}{cur}' < res:
+                res = f'{c}{cur}'
+            return
+        dfs(n.left, f'{c}{cur}')
+        dfs(n.right, f'{c}{cur}')
+    dfs(root, '')
+    return res

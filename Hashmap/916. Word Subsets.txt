@@ -1,0 +1,30 @@
+class Solution:
+    def wordSubsets(self, words1: List[str], words2: List[str]) -> List[str]:
+        """
+            words1 = ["amazon","apple","facebook","google","leetcode"], words2 = ["lee","aooc","aacdeo"]
+            words2_count     = [l:1, e:2], [a:1, o:2, c:1] ,[a:2, c:1, d:1, e:1, o:1]
+            max_words2_count = [a:2, c:1, d:1, e:2, o:2] # each char appears max count in words2
+            words1_count each char count should be >= max_words_count
+        """
+        def get_arr(w):
+            arr = [0]*26
+            for c in w:
+                arr[ord(c)-ord('a')] +=1
+            return arr
+        max_count = [0]*26
+        for w in words2:
+            arr2 = get_arr(w)
+            for i in range(0, 26):
+                if max_count[i] < arr2[i]:
+                    max_count[i] = arr2[i]
+        res = []
+        for w in words1:
+            arr1 = get_arr(w)
+            valid=True
+            for i in range(0, 26):
+                if arr1[i] < max_count[i]:
+                    valid=False
+                    break
+            if valid:
+                res.append(w)
+        return res

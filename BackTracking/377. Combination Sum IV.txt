@@ -1,0 +1,12 @@
+def combinationSum4(self, nums: List[int], target: int) -> int:
+    @cache
+    def comb(t):
+        if t < 0:
+            return 0
+        if t == 0:
+            return 1
+        res=0
+        for i in range(0, len(nums)): # start from 0
+            res+=comb(t-nums[i])
+        return res
+    return comb(target

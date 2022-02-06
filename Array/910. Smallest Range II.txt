@@ -1,0 +1,19 @@
+class Solution:
+    def smallestRangeII(self, nums: List[int], k: int) -> int:
+        """
+            nums = 1 2 5 7 9 11
+            k    = 3
+            min = 1, max = 11. diff = max-min # assume all minus k or add k
+            assuming best answer appears when a[i]+k and a[i+1]-k, find the best split point. find the i , when: (a[i]+k)-(a[i+1]-k) is minimum diff. and :
+            a[i]+k ,max-k may become a new max
+            a[i+1]-k , min+k may become a new min
+            diff = min(diff, max(a[i]+k, max-k)- min(min+k, a[i+1]-k) ).
+        """
+        if len(nums) < 2:
+            return 0
+        nums.sort()
+        min1, max1 = nums[0], nums[-1]
+        res = max1-min1 
+        for i in range(len(nums)-1):
+            res = min (res, max(nums[i]+k, max1-k)-min(nums[i+1]-k, min1+k) )
+        return res

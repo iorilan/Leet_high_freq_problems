@@ -1,0 +1,18 @@
+def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+    pre = prerequisites
+    dependencies = {i:set() for i in range(0, numCourses)}
+    for k,v in pre:
+        dependencies[k].add(v)
+  
+    while len(dependencies.keys())>0 :
+        # find the courses has no dependency
+        no_dependency = [x for x in dependencies.keys() if len(dependencies[x]) == 0]
+        if not no_dependency :
+            return False
+        for c in no_dependency:
+            # finish each course, remove it from all course dependency list
+            for k, dep in dependencies.items():
+                if c in dep:
+                    dep.remove(c)
+            del dependencies[c]
+    return True

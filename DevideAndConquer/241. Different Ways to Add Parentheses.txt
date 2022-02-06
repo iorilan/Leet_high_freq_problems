@@ -1,0 +1,40 @@
+def diffWaysToCompute(self, expression: str) -> List[int]:
+    """
+    Sample1 : 2*3-4  =>
+             
+             *              -
+            / \            / \
+           2   -          *   4
+              / \        / \
+             3   4      2   3
+    let Tree(2*3-4) = result of 2*3-4
+    
+    Sample2 : 2*3-4*5 =>
+             *                    *             -
+            / \                 /    \         /  \
+           2   Tree(3-4*5) Tree(2*3-4) 5      *    * 
+                                             / \  / \
+                                            2   3 4  5
+    """
+    def val(left, right, operator):
+        if operator == '+':
+            return left+right
+        elif operator == '-':
+            return left-right
+        else:
+            return left*right
+    @cache                                          # Cache expression result
+    def dwc(exp):
+        if all(e not in ['+', '-', '*'] for e in exp):
+            return [int(exp)]
+        res=[]
+        for i, e in enumerate(exp):                 # Loop through expression
+            if e not in ['+', '-', '*']:            # Skip numbers
+                continue
+            left = dwc(exp[:i])                     # Try put every operator as root node
+            right = dwc(exp[i+1:])
+            for l in left:
+                for r in right:
+                    res.append(val(l, r, e))
+        return res
+    return dwc(expression)

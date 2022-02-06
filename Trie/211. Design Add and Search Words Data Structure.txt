@@ -1,0 +1,42 @@
+class Node :
+    def __init__(self, v):
+        self.val = v
+        self.child = []
+        self.end=False
+
+class WordDictionary:
+
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.root = Node('')
+
+    def addWord(self, word: str) -> None:
+        cur = self.root
+        for w in word:
+            c = [x for x in cur.child if x.val == w]
+            if c:
+                cur = c[0]
+            else:
+                cur.child.append(Node(w))
+                cur = cur.child[-1]
+        cur.end = True
+
+    def search(self, word: str) -> bool:
+        return self.found(self.root, word)
+                
+    def found(self, cur, word):
+        for i, w in enumerate(word):
+            if w == '.':
+                for c in cur.child:
+                    r = self.found(c, word[i+1:])
+                    if r :
+                        return True
+                return False
+            else:
+                c = [x for x in cur.child if x.val == w]
+                if not c:
+                    return False
+                cur = c[0]
+        return cur.end

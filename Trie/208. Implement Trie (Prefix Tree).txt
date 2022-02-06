@@ -1,0 +1,51 @@
+class Node:
+    def __init__(self, v):
+        self.val = v
+        self.children = []
+        self.end=False
+
+class Trie:
+
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.root = Node('')
+
+    def insert(self, word: str) -> None:
+        """
+        Inserts a word into the trie.
+        """
+        cur = self.root
+        for w in word:
+            matched = [c for c in cur.children if c.val == w]
+            if not matched:
+                cur.children.append(Node(w))
+                cur = cur.children[-1]
+            else:
+                cur = matched[0]
+        cur.end=True                    # end char of word
+
+    def _search(self, word):            # to be reused in search and prefix search
+        cur = self.root
+        for w in word:
+            matched = [c for c in cur.children if c.val == w]
+            if matched:
+                cur = matched[0]
+            else:
+                return None
+        return cur
+        
+    def search(self, word: str) -> bool:
+        """
+        Returns if the word is in the trie.
+        """
+        res = self._search(word)
+        return False if not res else res.end
+
+    def startsWith(self, prefix: str) -> bool:
+        """
+        Returns if there is any word in the trie that starts with the given prefix.
+        """
+        res = self._search(prefix)
+        return False if not res else True

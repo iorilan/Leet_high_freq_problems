@@ -1,0 +1,31 @@
+def threeSumMulti(self, arr: List[int], target: int) -> int:
+    """
+        For   : a+b+c=target
+        Case1 : aaaabbbccc a!=b b!=c a!=c   total = count_a*count_b*count_c
+        Case2 : aaaaaaaccc (a=b!=c)         total = count_c*count_a*(count_a-1)/2!
+        Case3 : aaaabbbbbb (a!=b=c)         total = count_a*count_b*(count_b-1)/2!
+        Case4 : aaaaaaaaaa (a=b=c)          total = count*(count-1)*(count-2)/3!
+    """
+    count = Counter(arr)
+    cache = set()
+    res = 0
+    for a in range(0, 101):
+        for b in range(0, 101):
+            t=target-a-b
+            seq = tuple(sorted([a,b,t]))
+            if seq not in cache:
+                c_t = count.get(t, 0)
+                c_a = count.get(a, 0)
+                c_b = count.get(b, 0)
+                if a==b==t:
+                    res += c_t*(c_t-1)*(c_t-2)/6
+                elif t == a:
+                    res += c_t*(c_t-1) /2 *c_b
+                elif t == b:
+                    res += c_t*(c_t-1) /2 *c_a
+                elif a==b:
+                    res += c_a*(c_a-1) /2 *c_t
+                else:
+                    res += c_a*c_b*c_t
+                cache.add(seq)
+    return int(res)%(pow(10,9)+7)

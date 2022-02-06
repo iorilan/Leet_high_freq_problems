@@ -1,0 +1,24 @@
+def findMinHeightTrees(self, n: int, edges: List[List[int]]) -> List[int]:
+    if not edges:
+        return [0]
+
+    # build graph
+    g = defaultdict(set)
+    degree = [0]*n
+    for e1,e2 in edges:
+        g[e1].add(e2)
+        g[e2].add(e1)
+
+    res=[]
+    while g:
+        # find node with out-degree<=1
+        nodes = [k for k in g.keys() if len(g[k]) <= 1]
+        if not nodes:
+            break
+        res=nodes
+        for n in nodes:
+            for neighbor in g[n]:
+                g[neighbor].remove(n)
+            del g[n]
+        
+    return res

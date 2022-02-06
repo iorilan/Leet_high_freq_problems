@@ -1,0 +1,28 @@
+def increasingTriplet(self, nums: List[int]) -> bool:
+    """
+     front_min store previous min value (include self)
+     behind_max store behind max value
+                [2 1 5 0 4 6]
+     front_min  [2 1 1 0 0 0]   
+     behind_max [6 6 6 6 6 6]
+     result     [F F T F T F]
+    """
+    
+    if not nums or len(nums) == 0:
+        return False
+
+    front_min, behind_max = [nums[0]], [nums[-1]]
+    n = len(nums)
+
+    for i in range(1, n):
+        front_min.append(min(front_min[-1], nums[i]))
+
+    for j in range(n - 2, -1, -1):
+        behind_max.append(max(behind_max[-1], nums[j]))
+    behind_max.reverse()
+    
+    for i in range(1, n - 1):
+        if front_min[i] < nums[i] < behind_max[i]:
+            return True
+
+    return False

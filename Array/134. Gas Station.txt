@@ -1,0 +1,16 @@
+def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
+    """
+        Try from the first station until the last
+        During each try, track how many gas left, when left < 0, try from next station
+        only when total gas must >= total cost then can finish trip
+    """
+    total_left, gas_left = 0, 0
+    res = 0                     # try with first station
+    for i in range(len(gas)):
+        diff = gas[i]-cost[i]
+        gas_left += diff
+        total_left += diff      # track if it possible to have a solution
+        if gas_left < 0:
+            res = i+1           # try start from next station
+            gas_left = 0
+    return res if total_left >= 0 else -1

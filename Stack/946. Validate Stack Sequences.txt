@@ -1,0 +1,42 @@
+1. 
+def validateStackSequences(self, pushed: List[int], popped: List[int]) -> bool:
+    """
+        stack = [element before a]
+        pushed .a..
+        popped ..b.
+        think about element b
+        it could only be a or last element in stack
+        when finished ,stack should be reverse of popped
+    """
+    arr = []
+    while pushed and popped:
+        if arr and arr[-1] == popped[0]:
+            arr.pop()
+            popped.pop(0)
+        elif pushed[0] == popped[0]:
+            pushed.pop(0)
+            popped.pop(0)
+        else:
+            arr.append(pushed.pop(0))
+    while arr and popped:
+        if arr.pop() != popped.pop(0):
+            return False
+    return not arr and not popped
+2. 
+def validateStackSequences(self, pushed: List[int], popped: List[int]) -> bool:
+    """
+        stack  [1] [1,2] [1,2,3] [1,2,3]  [1,2,3]
+        pushed 1   2     3       4        5
+        idx1   0   1     2       3        4
+        popped                   4        5
+        idx2   0   0     0       1 <2.3>  4
+    """
+    arr = []
+    idx1 = idx2 = 0
+    while idx1 < len(pushed):
+        arr.append(pushed[idx1])
+        idx1 +=1
+        while arr and popped[idx2] == arr[-1]:
+            arr.pop()
+            idx2 +=1
+    return idx2 == len(popped)

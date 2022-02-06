@@ -1,0 +1,20 @@
+def lengthOfLIS(self, nums: List[int]) -> int:
+    dp =[1 for _ in range(len(nums))]
+    for i in range(len(nums)):
+        for j in range(i):
+            if nums[i]>nums[j]:
+                dp[i] = max(dp[i], dp[j]+1)
+    return max(dp)
+
+Solution 2: use binary search 
+def lengthOfLIS(self, nums: List[int]) -> int:
+    seq=[nums[0]]
+    best=1
+    for i in range(1, len(nums)):
+        if nums[i] > seq[-1]:
+            seq.append(nums[i])
+        else:
+            l = bisect.bisect_left(seq, nums[i])
+            seq[l]=nums[i]
+        best = max(best, len(seq))
+    return best

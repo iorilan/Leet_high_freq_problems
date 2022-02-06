@@ -1,0 +1,43 @@
+class StockSpanner:
+
+    def __init__(self):
+        self.arr = [] # store how many consecutive nums before (including self) self and <= self
+
+    def next(self, price: int) -> int:
+        """
+            1   1   1   2   1   4   6
+           100  80  60  70  60  75  85
+                |    |   |  |   |   |       #1
+           <-----    |   |  |   |   |       #1
+                 <---|   |  |   |   |       #1
+                <----<---|  |   |   |       #1+1
+                         <--|   |   |       #1
+                <--------<--<---|   |       #1+1+2
+           <----<---------------<---|       #1+4+1
+        """
+        idx = len(self.arr)-1
+        while idx >= 0 and self.arr and price >= self.arr[idx][0]:
+            idx -= self.arr[idx][1]
+        self.arr.append([price, len(self.arr)-idx])
+        return self.arr[-1][1]
+
+Solution2
+class StockSpanner:
+
+    def __init__(self):
+        self.stack = [] # stack to store # of elements <= self, top element is the smallest
+
+    def next(self, price: int) -> int:
+        """
+                100   80    60    70    60   75    85
+
+        stack : 100:1 80:1  60:1  70:2  60:1 75:4  85:6
+                      100:1 80:1  80:1  70:2 80:1  100:1
+                            100:1 100:1 80:1 100:1
+                                        100:1
+        """
+        res = 1
+        while self.stack and self.stack[-1][0] <= price:
+            res += self.stack.pop()[1]
+        self.stack.append([price, res])
+        return res

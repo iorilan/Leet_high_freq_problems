@@ -1,0 +1,15 @@
+def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+    res = set()
+    candidates.sort()
+    @cache
+    def comb(start, s, cur):
+        if s > target:
+            return 
+        if s == target:
+            res.add(cur)
+            return
+        for i in range(start, len(candidates)):
+            # start from next, every element can only be used once
+            comb(i+1, s+candidates[i], cur + (candidates[i],) )
+    comb(0, 0, ())
+    return [list(r) for r in res]

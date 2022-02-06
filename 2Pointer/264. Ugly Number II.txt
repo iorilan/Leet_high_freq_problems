@@ -1,0 +1,40 @@
+def nthUglyNumber(self, n: int) -> int:
+    """
+        Think about array 
+        a, b, c, d ,e
+        for every element , could multiply by 2, 3, 5 then become new array
+        2*a, 2*b, 2*c ...3*a, 3*b, 3*c ...5*a ,5*b
+        but we want to nth ugly number, the result is not sorted , it could be 
+        2*a, 1*c, 2*b, 3*a ....
+        To make sure the array is sorted while expanding. Could use 3 index to track when
+        multiply by 2,3,5. everytime , we want to add the min value
+        
+        Sample :
+        i2=i3=i5=0, arr=[1], n=5
+        1
+        <-----i2,i3,i5.  min(arr[i2]*2, arr[i2]*3, arr[i5]*5) = 2  use i2. i2+=1
+        1, 2
+           <-----i2 .  min(arr[i2]*2, arr[i3]*3, arr[i5]*5) = 3  use i3. i3+=1
+        <-----i3,i5
+        1, 2, 3
+           <------i2,i3 min(arr[i2]*2, arr[i3]*3, arr[i5]*5) = 4. use i2. i2+=1
+        <---------i5
+        1, 2, 3, 4
+              <---i2    min(arr[i2]*2, arr[1]*3, arr[0]*5) = 5. use i5. i5+=1
+           <------i3
+        <---------i5
+        1, 2, 3, 4, 5
+    """
+    i2,i3,i5=0,0,0
+    arr = [1]
+    while len(arr) < n:
+        v2,v3,v5 = arr[i2]*2, arr[i3]*3, arr[i5]*5
+        m = min(v2,v3,v5)
+        if m == v2:
+            i2+=1
+        if m == v3:
+            i3+=1
+        if m == v5:
+            i5+=1
+        arr.append(m)
+    return arr[-1]

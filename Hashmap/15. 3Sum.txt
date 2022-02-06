@@ -1,0 +1,10 @@
+def threeSum(self, nums: List[int]) -> List[List[int]]:
+    cache = {v:i for i,v in enumerate(nums)}
+    res = set()
+    for i in range(0, len(nums)):
+         for j in range(i+1, len(nums)):
+                t = -(nums[i] + nums[j])
+                if t in cache and cache[t] != i and cache[t] != j:
+                    res.add(tuple(sorted([nums[i],nums[j],t])))
+    res2 = [list(r) for r in res]
+    return list(res2)

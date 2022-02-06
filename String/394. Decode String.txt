@@ -1,0 +1,37 @@
+1. when ']' parse previous string
+def decodeString(self, s: str) -> str:
+    i = 0
+    while i<len(s):
+        if s[i] == ']':
+            j = i
+            while s[j] != '[':
+                j-=1
+            s1 = s[j+1:i]
+            times = ''
+            k=j-1
+            while k>=0 and s[k].isdigit():
+                times=f'{s[k]}{times}'
+                k-=1
+            s2=int(times)*s1
+            s=s[:k+1]+s2+s[i+1:]
+            i=len(s2)+k
+        i+=1
+    return s
+
+2. Use regex search (much cleaner)
+def decodeString(self, s: str) -> str:
+    pattern = '(\d+)\[([a-z]+)\]'
+    while True:
+        res = re.search(pattern, s)
+        if not res:
+            return s
+        times, s1 = int(res[1]), res[2]
+        s = s.replace(f'{times}[{s1}]', times*s1)
+    return s
+
+3. Use regex sub ( bit slower, but clearer)
+def decodeString(self, s: str) -> str:
+    pattern = '(\d+)\[([a-z]+)\]'
+    while '[' in s:
+        s = re.sub(pattern, lambda m: int(m.group(1))*m.group(2), s)
+    return s

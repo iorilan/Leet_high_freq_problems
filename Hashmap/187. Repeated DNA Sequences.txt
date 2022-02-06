@@ -1,0 +1,7 @@
+def findRepeatedDnaSequences(self, s: str) -> List[str]:
+    if len(s) < 10:
+        return []
+    cache = defaultdict(int)
+    for i in range(0, len(s)-9):
+        cache[s[i:i+10]] +=1
+    return list([k for k, v in cache.items() if v > 1])

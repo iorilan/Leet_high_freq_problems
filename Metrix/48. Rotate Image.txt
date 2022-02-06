@@ -1,0 +1,12 @@
+def rotate(self, matrix: List[List[int]]) -> None:
+    """
+    Do not return anything, modify matrix in-place instead.
+    """
+    N = len(matrix)
+    def rota(m, r):
+        for c in range(r, N-1-r):
+            a,b,c1,d = m[r][c],m[c][N-1-r],m[N-1-r][N-1-c],m[N-1-c][r]
+            m[r][c],m[c][N-1-r],m[N-1-r][N-1-c],m[N-1-c][r] = d,a,b,c1
+        
+    for r in range(0, N//2 ):
+        rota(matrix, r)

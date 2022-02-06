@@ -1,0 +1,27 @@
+class Solution:
+    def maxSubarraySumCircular(self, nums: List[int]) -> int:
+        """
+            Case1 : [....max array....]
+            Case2 : [......max][array...] # first and last element exclusive
+            https://leetcode.com/problems/maximum-sum-circular-subarray/discuss/1348545/Python-3-solutions-Clean-and-Concise-O(1)-Space
+        """
+        def max_sub(nums):
+            ans = cur= float('-inf')
+            for n in nums:
+                if cur+n > n:
+                    cur += n
+                else:
+                    cur = n
+                ans = max(cur, ans)
+            return ans
+        def min_sub(nums):
+            ans = cur= float('inf')
+            for i in range(1, len(nums)-1):
+                n = nums[i]
+                if cur+n < n:
+                    cur += n
+                else:
+                    cur = n
+                ans = min(cur, ans)
+            return ans
+        return max(max_sub(nums), sum(nums)-min_sub(nums))

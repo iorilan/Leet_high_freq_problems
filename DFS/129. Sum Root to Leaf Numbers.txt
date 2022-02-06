@@ -1,0 +1,10 @@
+def sumNumbers(self, root: Optional[TreeNode]) -> int:
+    res=0
+    def dfs(n, p):
+        if not 
+        if n.left:
+            dfs(n.left, p+str(n.val))
+        if n.right:
+            dfs(n.right, p+str(n.val))
+    dfs(root, '')
+    return res

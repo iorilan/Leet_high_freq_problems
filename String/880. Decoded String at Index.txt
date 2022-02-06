@@ -1,0 +1,24 @@
+def decodeAtIndex(self, s: str, k: int) -> str:
+    """
+        s=[c1, c2, ....], k
+                     <- search from last to first , c=s[i]
+        Case 1 : c is number and current_lengh %k ==0 (next char is the answer)
+        Case 2 : c is alphabet and current_length=k , c is the answer
+    """
+    total=0
+    for c in s:
+        if c >= '2' and c <= '9':
+            total *= int(c)
+        else:
+            total+=1
+            
+    for i in range(len(s)-1, -1, -1):
+        if s[i] >= '2' and s[i] <= '9':
+            n=int(s[i])
+            total//=n
+            k%=total
+        else:
+            if k == total or k == 0:
+                return s[i]
+            total-=1
+    return ''

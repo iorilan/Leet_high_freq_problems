@@ -1,0 +1,32 @@
+def findAndReplacePattern(self, words: List[str], pattern: str) -> List[str]:
+    def valid(s ,p):
+        print(s)
+        s = list(s)
+        s_p = {} # store mapping from s to p
+        p_s = {} # store mapping from p to s
+        """
+            s=abb , p=abc
+                ^       ^
+                |_Case1_|  # b already mapped to b, now b trying mapped to c
+                
+            s=abc , p=abb
+                ^       ^
+                |_Case2_|  # c mapped to b which already used by b
+        """
+        for i in range(len(s)):
+            if s[i] in s_p: 
+                if s_p[s[i]] != p[i] : # Case1. s[i] mapped to different char from last time
+                    return False
+            else:
+                if p[i] in p_s and p_s[p[i]] != s[i]: # Case2. pattern[i] already used by other char
+                    return False
+                p_s[p[i]] = s[i]
+                s_p[s[i]] = p[i]
+        return True
+    
+    p = list(pattern)
+    res= []
+    for w in words:
+        if valid(w, p):
+            res.append(w)
+    return res

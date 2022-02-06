@@ -1,0 +1,20 @@
+def bagOfTokensScore(self, tokens: List[int], power: int) -> int:
+    """
+        Greedy thinking :
+        as long as have power, play the token cost lowest
+        If not, use score to play the highest token to charge with max power
+    """
+    tokens.sort()
+    score = 0
+    res = 0
+    while tokens and (power or score):
+        if power < tokens[0]:
+            if not score:
+                return res
+            score -= 1
+            power += tokens.pop()
+        else:
+            power -= tokens.pop(0)
+            score += 1
+        res = max(res, score)
+    return res

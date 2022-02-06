@@ -1,0 +1,9 @@
+def searchRange(self, nums: List[int], target: int) -> List[int]:
+    if not nums:
+        return [-1, -1]
+    left=bisect.bisect_left(nums, target)
+    x1 = left if left<len(nums) and nums[left] == target else -1
+    
+    right=bisect.bisect_right(nums, target)
+    x2 = right-1 if nums[right-1] == target else -1
+    return [x1, x2]

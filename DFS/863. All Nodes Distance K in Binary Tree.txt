@@ -1,0 +1,43 @@
+"""
+    DFS
+    #1 set parent node 
+             3(none)
+           /        \ 
+          5(3)      1(3)
+         / \        /   \
+     6(5)  2(5)  0(1)  8(1)
+          /   \
+         7(2)  4(2)
+         
+    #2 DFS find(left) find(right) find(parent) cache visited nodes
+"""
+def distanceK(self, root: TreeNode, target: TreeNode, k: int) -> List[int]:
+    
+    def parent(n, p):
+        if not n:
+            return
+        if p:
+            setattr(n, 'parent', p)
+        parent(n.left, n)
+        parent(n.right, n)
+    
+    res = set()
+    def find(cur, k, visited):
+        nonlocal res
+        if not cur:
+            return
+        if cur.val in visited:
+            return
+        visited.add(cur.val)
+        if k == 0:
+            res.add(cur.val)
+            return
+        if hasattr(cur, 'parent'):
+            find(cur.parent, k-1, visited)
+        find(cur.left, k-1, visited)
+        find(cur.right, k-1, visited)
+    parent(root, None)
+    
+    find(target, k, set())
+    
+    return list(res)

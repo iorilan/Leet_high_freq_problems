@@ -1,0 +1,6 @@
+def minimumTotal(self, triangle: List[List[int]]) -> int:
+    t = triangle
+    for r in range(len(t)-2,-1,-1):
+        for c in range(0, len(t[r])):
+            t[r][c] += min(t[r+1][c], t[r+1][c+1])
+    return t[0][0]

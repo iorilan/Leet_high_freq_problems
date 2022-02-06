@@ -1,0 +1,9 @@
+def maxProduct(self, words: List[str]) -> int:
+	  arr = {}
+	  res=0
+	  for w in words:
+	      for k,v in arr.items():
+	          if all(c not in v for c in w ):
+	              res = max(res, len(k) * len(w))
+	      arr[w] = {c for c in w}
+	  return res

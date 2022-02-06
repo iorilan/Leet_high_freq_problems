@@ -1,0 +1,39 @@
+def orangesRotting(self, grid: List[List[int]]) -> int:
+    # load the rotten into q
+    q = []
+    row, col = len(grid), len(grid[0])
+    for r in range(row):
+        for c in range(col):
+            if grid[r][c] == 2:
+                q.append((r,c))
+
+    # find the neighbor oranges which could get rotten in next time
+    def get_next(r,c):
+        d = [(1,0),(0,1),(-1,0),(0,-1)]
+        nonlocal grid, row, col
+        res = set()
+        for d1 in d:
+            r1,c1 = r+d1[0], c+d1[1]
+            if r1 < 0 or c1 < 0 or r1 == row or c1 == col or grid[r1][c1] != 1:
+                continue
+            res.add((r1,c1))
+        return res
+    # BFS rotten the next
+    res = 0
+    while q:
+        nexts = set()
+        for r,c in q:
+            grid[r][c]=2
+        while q:
+            r,c = q.pop()
+            nexts|=get_next(r,c)
+        q = nexts
+        if not q: # handle last day
+            break
+        res+=1
+    # all must be rotten then consider success
+    for r in range(row):
+        for c in range(col):
+            if grid[r][c] == 1:
+                return -1
+    return res

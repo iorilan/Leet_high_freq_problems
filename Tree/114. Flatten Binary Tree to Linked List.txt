@@ -1,0 +1,38 @@
+def flatten(self, root: Optional[TreeNode]) -> None:
+    """
+    Sample 1
+                2
+               / \
+              3   4
+        ===> 2->3->4    #3.right=4  2.right=3
+    Sample 2
+                        1
+                       / \
+                      2    5
+                     / \  / \
+                    3   4 6  7
+         ===>       1
+                  /   \
+               2->3->4 5->6->7
+            => 1->2->3->4->5->6->7
+    So : 
+    left_node.right_most = right, 
+    node.right=left_node, 
+    node.left=None
+    """
+    def tree_to_list(n):
+        if not n :
+            return None, None
+        if not n.left and not n.right :
+            return n, n # self and right_most node 
+
+        l, r1 = tree_to_list(n.left)
+        r, r2 = tree_to_list(n.right)
+        right_most = r2 or r or r1 or n
+        if l :
+            r1.right = r
+            n.right = l
+            n.left = None
+        
+        return n, right_most
+    tree_to_list(root)

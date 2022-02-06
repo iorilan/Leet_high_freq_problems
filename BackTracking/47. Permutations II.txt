@@ -1,0 +1,12 @@
+def permuteUnique(self, nums: List[int]) -> List[List[int]]:
+    res=[]
+    nums.sort()
+    @cache
+    def perm(arr, cur):
+        if len(arr) == 0 :
+            res.append(cur[:])
+            return
+        for i in range(len(arr)):
+            perm(arr[:i]+arr[i+1:], cur+(arr[i],))
+    perm(tuple(nums), ())
+    return res

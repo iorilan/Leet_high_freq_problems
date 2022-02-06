@@ -1,0 +1,15 @@
+"""
+    Case1 : more than 1 zero , all product should be 0
+    Case2 : exact one zero, all should be 0 except the one itself=0
+    Case3 : no zero. get total product , result = total/self
+"""
+def productExceptSelf(self, nums: List[int]) -> List[int]:
+    zero_count = len([n for n in nums if n == 0])
+    if zero_count > 1:
+        return [0] * len(nums)
+    elif zero_count == 1:
+        total = reduce(lambda x,y: x*y, [n for n in nums if n != 0])
+        return [0 if n != 0 else total for n in nums]
+    else:
+        total = reduce(lambda x,y: x*y, nums)
+        return [total//n for n in nums]

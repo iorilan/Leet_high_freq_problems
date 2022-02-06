@@ -1,0 +1,7 @@
+def largestNumber(self, nums: List[int]) -> str:
+    res = sorted(list(map(str, nums)), 
+                 key=cmp_to_key(lambda x1,x2: 1 if x1+x2>x2+x1 else -1),
+                 reverse=True)
+    if res[0] == '0':
+        return '0'
+    return ''.join(res)

@@ -1,0 +1,15 @@
+def longestConsecutive(self, nums: List[int]) -> int:
+    if not nums:
+        return 0
+    cache = set(nums)
+    res = 1
+    cur = 1
+    for n in nums:
+        if n-1 not in cache:
+            x = n
+            cur = 0
+            while x in cache:
+                cur+=1
+                x+=1
+        res = max(cur, res)
+    return res

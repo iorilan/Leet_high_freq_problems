@@ -1,0 +1,53 @@
+# Method 1 : Sort + greedy (faster) 
+def advantageCount(self, nums1: List[int], nums2: List[int]) -> List[int]:
+    """
+        sorted(nums1) = 2 7 11 15
+        sorted(nums2) = 1 4 10 11
+      index of nums2  = 0 2 1  3
+      
+      if nums1 biggest > nums2 biggest , use it 
+      else use smallest value in nums1
+    """
+    nums1.sort()
+    arr2 = sorted(enumerate(nums2), key=lambda x: x[1])
+    res = [0]*len(arr2)
+    while arr2:
+        idx, n2 = arr2.pop()
+        if nums1[-1] > n2:
+            res[idx] = nums1.pop()
+        else:
+            res[idx] = nums1.pop(0)
+    return res
+# Method2  Loop through nums2 do binary search in nums1 (sorted)
+def advantageCount(self, nums1: List[int], nums2: List[int]) -> List[int]:
+    """
+    Sort nums1 and do binary search for every number of nums2 in nums1
+    if can not find ,use the least number (greedy)
+    Case1
+        2   7     11   15
+        |   |      |    |
+      1-    |      |    |
+      10-----------     |
+      4-----|           |
+      11----------------|
+    
+    Case2
+      12    24     8    32
+     =>
+      8     12     24   32
+    13--------------|    |
+    25-------------------|
+    32 - (no result, use the least number)
+    11-------
+    """
+    nums1.sort()
+    res = []
+    while nums2:
+        n = nums2.pop(0)
+        idx = bisect.bisect_left(nums1, n)
+        while idx < len(nums1) and nums1[idx] == n:
+            idx +=1
+        if idx == len(nums1):
+            idx = 0
+        res.append(nums1.pop(idx))
+    return res

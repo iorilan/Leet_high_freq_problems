@@ -1,0 +1,48 @@
+Solution1
+def minFlipsMonoIncr(self, s: str) -> int:
+    """
+        think about index i
+                    i
+                    |
+        case1 : ...00...
+        case2 : ...01...
+        case3 : ...11...
+        case4 : ...10...
+        For case2 ,case3 . no need to do anything .
+        for case1, case4 , either 
+        a. flip all previous 1 to 0, or 
+        b. flip itself from 0 into 1
+        so flip[i] = min(count_one, flip[i-1]+1)
+    """
+    flip = [0] * len(s)
+    one = 0
+    for i in range(0, len(s)):
+        if s[i] == '1':
+            one +=1
+            flip[i]=flip[i-1]
+        else:
+            flip[i] = min(flip[i-1]+1, one)
+    return flip[-1]
+
+Solution2
+def minFlipsMonoIncr(self, s: str) -> int:
+    """
+        ...0..1...
+        count zero and one
+        when : zero > one , always change one to zero .this is the best case to continue
+        Case1 01100.. change all 1 to zero
+        Case2 ..1010  change all remaining 0 to one (zero<=one)
+    """
+    zero, one = 0, 0
+    res = 0
+    for i in range(0, len(s)):
+        if s[i] == '1':
+            one += 1
+        else:
+            zero += 1
+        # flip all one to zero.
+        if zero > one:
+            res += one
+            one = 0
+            zero = 0
+    return res+zero # change all remaining to one

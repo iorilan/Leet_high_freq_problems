@@ -1,0 +1,32 @@
+def cloneGraph(self, node: 'Node') -> 'Node':
+    if not node:
+        return None
+    
+    # dfs clone all node
+    mapping = {}
+    def dfs_clone(n, visit):
+        nonlocal mapping
+        if n.val in visit:
+            return 
+        visit.add(n.val)
+        mapping[n.val] = Node(n.val, []) # will fill up neighbor in another dfs
+        for n1 in n.neighbors:
+            dfs_clone(n1, visit)
+
+    # Based on original graph , dfs link the cloned nodes
+    def dfs_link(n, visit):
+        nonlocal mapping
+        if n.val in visit:
+            return
+        visit.add(n.val)
+
+        cloned_node = mapping[n.val]
+        for n1 in n.neighbors:
+            cloned_node_neighbor = mapping[n1.val]
+            cloned_node.neighbors.append(cloned_node_neighbor)
+            dfs_link (n1, visit)
+
+    dfs_clone(node, set())
+    dfs_link(node, set())
+
+    return mapping[node.val]

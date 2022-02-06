@@ -1,0 +1,29 @@
+def spiralMatrixIII(self, rows: int, cols: int, rStart: int, cStart: int) -> List[List[int]]:
+    # {current direction : next direction}
+    next_dir = {'r':'d', 'd':'l', 'l':'u', 'u':'r'}
+    d = 'r'
+    res = []
+    total = rows*cols
+    size=1 # walking size
+    cur = [rStart, cStart] # current position
+    count=0 # track times change direction
+    while len(res) < total:
+        for i in range(0, size):
+            # save result if within range
+            if 0<= cur[0] < rows and 0 <= cur[1] < cols:
+                res.append(cur.copy())
+            if d == 'r':
+                cur[1] += 1
+            elif d == 'l':
+                cur[1] -= 1
+            elif d == 'u':
+                cur[0] -= 1
+            else:
+                cur[0] += 1
+        
+        d = next_dir[d]
+        # when changed direction 2 times, increase walking size
+        count+=1
+        if count >0 and count%2 == 0:
+            size+=1
+    return res

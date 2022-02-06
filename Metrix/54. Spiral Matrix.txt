@@ -1,0 +1,30 @@
+def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+    res=[]
+    rows, cols = len(matrix), len(matrix[0])
+    def blocked(m, r, c):
+        return (r == rows or r < 0 or c == cols or c < 0) or m[r][c] == 0
+    
+    direction='r' # current direction
+    r,c = 0,0 # current row and column
+    # current direction : go straight or turn
+    direction_moves = {
+        'r' : {'go':[0,1], 'turn':['d',1,0]},
+        'l' : {'go':[0,-1], 'turn':['u',-1,0]},
+        'u' : {'go':[-1,0], 'turn':['r',0,1]},
+        'd' : {'go':[1,0], 'turn':['l',0,-1]}
+    }
+    
+    while len(res) < rows*cols:
+        res.append(matrix[r][c])
+        matrix[r][c] = 0 # mark as done
+        
+        move = direction_moves[direction]
+        go_r, go_c = move['go']
+        if not blocked(matrix, r+go_r,c+go_c):
+            r+=go_r
+            c+=go_c
+        else:
+            direction, turn_r,turn_c = move['turn']
+            r+= turn_r
+            c+= turn_c
+    return res

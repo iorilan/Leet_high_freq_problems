@@ -1,0 +1,36 @@
+def removeKdigits(self, num: str, k: int) -> str:
+    """
+    num=a b c d     k=2
+    when loop through this array, for every element :
+    a : nothing to remove
+    b : remove a
+    c : remove max (a,b)  but no need check from beginning, if a is max, a already removed when process b
+    d : remove max (a,b,c) similarly , if a or b max, already removed when process c.
+    so for sequence [a1, a2, ...a[i]..a[n]] when process a[i], the information needed is the max_element_before self, remove it ,until self become the max then push self in. pass the info to next element.
+    This is the idea of monotonic stack . maintein increasing stack, make sure the previous top element <= current.
+    
+    Sample :
+        num =    1  4  3   2   2     1          9        k=4
+    mono stack[] 1 1,4 1,3 1,2 1,2,2 1
+    remove[]           4   4,3 4,3   4,3,2,2
+    
+    """
+    stack = []
+    remove = []
+    res=''
+    for i in range(0, len(num)):
+        while k> 0 and stack and num[stack[-1]] > num[i]:
+            remove.append(stack.pop())
+            k-=1
+        if k == 0:
+            break
+        else:
+            stack.append(i)
+    while stack and k > 0:
+        remove.append(stack.pop())
+        k-=1
+    
+    res= ''.join([x for i,x in enumerate(num) if i not in remove])
+    if not res:
+        return "0"
+    return str(int(res))

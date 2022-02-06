@@ -1,0 +1,42 @@
+1. DFS +memo. either take or skip current element
+def canPartition(self, nums: List[int]) -> bool:
+    """
+        goal: get sum(sub-array) = half of sum(nums)
+        Loop through array, either skip current element, or add into sum
+    """
+    s = sum(nums)
+    half = s/2
+    if s % 2 != 0:
+        return False
+    @cache
+    def comb(idx, cur):
+        nonlocal nums, half
+        if half < cur or idx == len(nums):
+            return False
+        if cur == half:
+            return True
+        return comb(idx+1, cur) or comb(idx+1, cur+nums[idx])
+    return comb(0, 0)
+
+2. Consider it as a subset problem. backtracking+memo
+def canPartition(self, nums: List[int]) -> bool:
+    """
+        goal: get sum(sub-array) = half of sum(nums)
+        from 0..n pick the ith element and continue
+    """
+    s = sum(nums)
+    half = s/2
+    if s % 2 != 0:
+        return False
+    @cache
+    def comb(idx, cur):
+        nonlocal nums, half
+        if half < cur or idx == len(nums):
+            return False
+        if cur == half:
+            return True
+        for i in range(idx, len(nums)):
+            if comb(i+1, cur+nums[i]):
+                return True
+        return False
+    return comb(0, 0)

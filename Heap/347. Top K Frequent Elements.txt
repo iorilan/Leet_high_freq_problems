@@ -1,0 +1,9 @@
+def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+    wc = collections.Counter(nums)
+    arr = [(v,k) for k,v in wc.items()] # sort by frequency then value
+    res = []
+    for a in arr:
+        heapq.heappush(res, a)
+        if len(res) > k:
+            heapq.heappop(res)
+    return [k for v,k in res]

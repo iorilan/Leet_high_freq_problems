@@ -1,0 +1,21 @@
+def calculate(self, s: str) -> int:
+    stack = []
+    num = '0'
+    op = '+'
+    s += '+0' # for the last operand
+    for c in s:
+        if c.isdigit():
+            num += c
+        elif not c.isspace():
+            num = int(num)
+            if op == '+':
+                stack.append(num)
+            elif op == '-':
+                stack.append(-num)
+            elif op == '*':
+                stack.append(stack.pop()*num)
+            else:
+                stack.append(int(stack.pop()/num))
+            op = c
+            num = ''
+    return sum(stack)

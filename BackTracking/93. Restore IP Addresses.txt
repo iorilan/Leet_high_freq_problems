@@ -1,0 +1,34 @@
+def restoreIpAddresses(self, s: str) -> List[str]:
+    """
+        Core idea : check every digit , and span to next digit if possible then contine do back tracking. until there are 4 parts
+        Sample
+            25525511135
+        =>  2.restore(5525511135) => 2.5.restore(525511135)...
+        =>  25.restore(525511135) => 25.5.restore(25511135)...
+        =>  255.restore(25511135) => 255.2.restore(5511135)...
+        =>  ...
+        =>  xxx.restore(nothing)
+    """
+    def valid(s):
+        if not s:
+            return False
+        i = int(s)
+        if i > 255 or i < 0:
+            return False
+        if s[0] == '0' and len(s)>1:
+            return False
+        return True
+    res = []
+    def restore(cur, parts, s):
+        nonlocal res
+        if parts == 3:
+            if valid (s):
+                res.append(f'{cur}.{s}')
+            return
+        span_len = max(4, len(s)) #try to span 1-3 digits check if it is valid
+        for i in range(span_len):
+            if i<span_len and valid(s[:i+1]):
+                next_cur = f'{cur}.{s[:i+1]}' if cur else s[:i+1]
+                restore(next_cur, parts+1, s[i+1:]) # continue the same process with the rest s
+    restore ('', 0, s)
+    return res

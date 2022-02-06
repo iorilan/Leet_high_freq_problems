@@ -1,0 +1,26 @@
+def isValidSudoku(self, board: List[List[str]]) -> bool:
+    def valid(r, c, w, h):
+        nonlocal board
+        cache = set()
+        for i in range(r, r+h):
+            for j in range(c, c+w):
+                if board[i][j] == '.':
+                    continue
+                if board[i][j] in cache:
+                    return False 
+                cache.add(board[i][j])
+        return True
+    rows, cols = len(board), len(board[0])
+    for r in range(0, rows):
+        if not valid(r, 0, cols, 1):
+            return False
+    
+    for c in range(0, cols):
+        if not valid(0, c, 1, rows):
+            return False
+    
+    for r in range(0, rows, 3):
+        for c in range(0, cols, 3):
+            if not valid(r,c, 3, 3):
+                return False
+    return True

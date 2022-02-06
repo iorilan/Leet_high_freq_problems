@@ -1,0 +1,74 @@
+1. DFS
+def numIslands(self, grid: List[List[str]]) -> int:
+	"""
+		Idea : 
+		when there is '1', DFS mark the connected '1' as '2'
+		num of islands = How many times DFS can do
+	"""
+
+	row, col = len(grid), len(grid[0])
+	def mark(grid, r, c):
+		if r < 0 or c < 0 or r == row or c == col or grid[r][c] != '1':
+			return
+		grid[r][c] = '2'
+		mark(grid, r-1, c)
+		mark(grid, r+1, c)
+		mark(grid, r, c-1)
+		mark(grid, r, c+1)
+
+	res=0
+	for r in range(0, row):
+		for c in range(0, col):
+			if grid[r][c] == '1':
+				res+=1
+				mark(grid, r, c)
+
+	return res
+
+2. UnionFind
+class UF:
+    def __init__(self, row, col, grid):
+        self.parent = {}                     # {(row, col): (parent_row, parent_col) }
+        self.count = 0                       # track num of islands
+        for r in range(row):
+            for c in range(col):
+                if grid[r][c] == '1':        # only store parent for island
+                    self.parent[(r,c)]=(r,c) # every island parent point to self first
+                    self.count+=1
+        
+    def union(self, n1, n2):  # n1, n2 : (row, col)
+        p1, p2 = self.find(n1), self.find(n2)
+        if p1 != p2:                         # merge 2 parents. it doesn't matter which will be new parent
+            self.parent[p1] = p2
+            self.count -= 1
+        
+    def find(self, node):
+        p = self.parent[node]
+        if p == node:
+            return node
+        return self.find(p)
+
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        """
+            Idea : 
+            when there is '1' ,check and union the left/right/up/down '1'
+        """
+        
+        row, col = len(grid), len(grid[0])
+        uf = UF(row, col, grid)
+        dirs = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+        def valid(r, c, row, col, grid):
+            if r < 0 or c < 0 or r == row or c == col or grid[r][c] == '0':
+                return False
+            return True
+        
+        for r in range(0, row):
+            for c in range(0, col):
+                if grid[r][c] == '1':
+                    for d in dirs:
+                        r1, c1 = r+d[0], c+d[1]
+                        if not valid(r1, c1, row, col, grid):
+                            continue
+                        uf.union((r, c), (r1, c1))
+        return uf.count

@@ -1,0 +1,39 @@
+def isCompleteTree(self, root: Optional[TreeNode]) -> bool:
+    """
+    Case 1: 
+         n
+        / \
+    none   right   <-node appears after a none
+    
+    Case2 : 
+        n
+       / \
+    left  none     <- this must be last level
+    /  \
+   c1   c2 
+    """
+    q = [root]
+    level = 0
+    while q:
+        nexts = []
+        none_child = False
+        while q :
+            n = q.pop(0)
+            if n.left :
+                if none_child: # case1
+                    return False
+                nexts.append(n.left)
+            else:
+                none_child = True
+            if n.right :
+                if none_child: # case1
+                    return False
+                nexts.append(n.right)
+            else:
+                none_child = True
+        q = nexts
+        level +=1
+        if len(q) != pow(2, level):  # case2
+            if any(n.left or n.right for n in nexts):
+                return False
+    return True

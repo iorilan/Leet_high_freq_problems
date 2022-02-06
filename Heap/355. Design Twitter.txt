@@ -1,0 +1,45 @@
+class Twitter:
+
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.user_f = defaultdict(set) # user- followers
+        self.user_t = defaultdict(set) # user - tweets
+        self.count = 1
+        
+
+    def postTweet(self, userId: int, tweetId: int) -> None:
+        """
+        Compose a new tweet.
+        """
+        self.user_t[userId].add((self.count, tweetId)) # make latest appear first in heap
+        self.count+=1
+
+    def getNewsFeed(self, userId: int) -> List[int]:
+        """
+        
+        """
+        res = []
+        followees_and_self = self.user_f.get(userId, set()) | {userId}
+        for f in followees_and_self:
+            for t in self.user_t.get(f, set()): 
+                heapq.heappush(res, t)
+                if len(res) > 10:
+                    heapq.heappop(res)
+        return [r[1] for r in sorted(res, reverse=True)]
+            
+
+    def follow(self, followerId: int, followeeId: int) -> None:
+        """
+        Follower follows a followee. If the operation is invalid, it should be a no-op.
+        """
+        self.user_f[followerId].add(followeeId)
+        
+
+    def unfollow(self, followerId: int, followeeId: int) -> None:
+        """
+        Follower unfollows a followee. If the operation is invalid, it should be a no-op.
+        """
+        if followeeId in self.user_f.get(followerId, set()):
+            self.user_f[followerId].remove(followeeId)

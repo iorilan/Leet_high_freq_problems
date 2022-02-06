@@ -1,0 +1,18 @@
+def partition(self, s: str) -> List[List[str]]:
+    res = []
+    def is_palindrome(s2):
+        for i in range(0, len(s2)//2):
+            if s2[i] != s2[len(s2)-1-i]:
+                return False
+        return True
+    
+    def partition(s1, r):
+        if not s1 :
+            if r:
+                res.append(r[:])
+            return 
+        for i in range(0, len(s1)):
+            if is_palindrome(s1[:i+1]):
+                partition(s1[i+1:], r+[s1[:i+1]])
+    partition(s,[])
+    return res

@@ -1,0 +1,50 @@
+def intervalIntersection(self, firstList: List[List[int]], secondList: List[List[int]]) -> List[List[int]]:
+    """
+    -------------------------------------
+    interval : 
+    Case1:
+        |----|
+           |----|
+    Case2:
+        |-----|
+    |-----|
+    max(s1, s2) <= min(e1, e2)
+    Case3:
+    |---|
+           |----|
+    Case4:
+            |-----|
+    |---|
+    max(s1, s2) > min(e1, e2)
+    ---------------------------------------
+    Moving index :
+        Case1:
+        i1 |----|      <-i
+        i2    |----|   <-j
+        i+=1 .for i to catch up j
+        
+        Case2:
+        i1      |----| <-i
+        i2 |-----|     <-j
+        j+=1 . for j for catch up i
+    """
+    res = []
+    i=j=0
+    def inter(i1, i2):
+        s1, e1 = i1
+        s2, e2 = i2
+        s = max(s1, s2)
+        e = min(e1, e2)
+        if s<=e:
+            return [s,e]
+        return [None,None]
+    while i < len(firstList) and j < len(secondList):
+        i1,i2 = firstList[i], secondList[j]
+        s, e = inter(i1, i2)
+        if s is not None:
+            res.append([s,e])
+        if i1[1] > i2[1]:
+            j+=1
+        else:
+            i+=1
+    return res

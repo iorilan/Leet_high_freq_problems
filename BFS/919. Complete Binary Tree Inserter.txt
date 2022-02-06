@@ -1,0 +1,26 @@
+class CBTInserter:
+
+    def __init__(self, root: Optional[TreeNode]):
+        self.root = root
+
+    def insert(self, val: int) -> int:
+        n = self.root
+        q = [n]
+        while q :
+            child = []
+            while q :
+                n1 = q.pop(0)
+                if not n1.left:
+                    n1.left = TreeNode(val)
+                    return n1.val
+                elif not n1.right:
+                    n1.right = TreeNode(val)
+                    return n1.val
+                else:
+                    child.append(n1.left)
+                    child.append(n1.right)
+            q = child
+        return -1
+
+    def get_root(self) -> Optional[TreeNode]:
+        return self.root

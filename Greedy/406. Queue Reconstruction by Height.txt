@@ -1,0 +1,22 @@
+def reconstructQueue(self, people: List[List[int]]) -> List[List[int]]:
+    arr = sorted(people, key=lambda x:(x[0], -x[1]), reverse=True)
+    # do a sorting like this 
+    #>>> people = [[7,0],[4,4],[7,1],[5,0],[6,1],[5,2]]
+    #>>> sorted(people, key=lambda x:(x[0], -x[1]), reverse=True)
+    #>>> [[7, 0], [7, 1], [6, 1], [5, 0], [5, 2], [4, 4]]
+    
+    # now populate from start to end. (7,0), (7,1)...
+    # make sure the element is smaller than what has been populated. 
+    # so that can simply do a insert into the 
+    # exact position. will not affact relative position of others
+    # (7,0)
+    # (7,0), (7,1)
+    # (7,0), (6,1), (7,1)
+    # (5,0), (7,0), (6,1), (7,1)
+    # (5,0), (7,0), (5,2), (6,1), (7,1)
+    # (5,0), (7,0), (5,2), (4,4), (6,1), (7,1)
+    res = []
+    while arr:
+        v, i = arr.pop(0)
+        res.insert(i, (v, i))
+    return res

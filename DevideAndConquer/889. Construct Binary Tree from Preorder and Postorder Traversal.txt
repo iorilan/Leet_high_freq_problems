@@ -1,0 +1,32 @@
+def constructFromPrePost(self, preorder: List[int], postorder: List[int]) -> Optional[TreeNode]:
+    """
+        pre:1,2,4,5,3,6,7
+        post:4,5,2,6,7,3,1
+        => 
+        root=1
+        left node-----       ----------post_idx
+                     |       |
+                pre:(2,4,5),(3,6,7)
+                post:(4,5,2),(6,7,3)
+        ------pre_idx-----^        ^----right node
+
+        pre_idx = post.index(2) = 2
+        post_idx = pre.index(3) = 3
+        1.left = pre:[2,4,5]=pre[:3]=pre[:pre_idx+1], post:[4,5,2]=post[:3]=post[:pre_idx+1]
+        1.right = pre:[3,6,7]=pre[3:]=pre[post_idx:], post:[6,7,3]=post[3:]=post[pre_idx+1:]
+        
+    """
+    def build(pre, post):
+        if len(pre) != len(post):
+            return None
+        root = TreeNode(pre.pop(0)) # root node is the first in pre order
+        post.remove(root.val) # remove it from post order
+        
+        if not pre:
+            return root
+        pre_idx = post.index(pre[0]) # assume pre[0] is the left node, find its index in post order
+        post_idx = pre.index(post[-1]) # assume post[-1] is the right node, find its index in pre order
+        root.left = build(pre[:pre_idx+1], post[:pre_idx+1]) # devide and conquer
+        root.right = build(pre[post_idx:], post[pre_idx+1:])
+        return root
+    return build(preorder, postorder)

@@ -1,0 +1,15 @@
+def connect(self, root: 'Optional[Node]') -> 'Optional[Node]':
+    if not root:
+        return None
+    q = [root]
+    while q :
+        children = []
+        while q:
+            n = q.pop(0)
+            n.next = q[0] if q else None
+            if n.left:
+                children.append(n.left)
+            if n.right:
+                children.append(n.right)
+        q = children
+    return root

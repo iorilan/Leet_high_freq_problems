@@ -1,0 +1,7 @@
+def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+    rows, cols = len(matrix), len(matrix[0])
+    for r in range(0, rows):
+        i = bisect.bisect_left(matrix[r], target)
+        if i != cols and matrix[r][i] == target:
+            return True
+    return False

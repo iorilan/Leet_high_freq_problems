@@ -1,0 +1,57 @@
+class BSTIterator:
+    """
+    Idea : for each node, store left nodes into stack .
+    when pop current nodes, push its right nodes into stack to make sure its right node pop before
+    its parent nodes
+                           7            init-> stack = [7, 3, 2]
+                        /    \
+                     3        15        
+                   /   \    
+                  2     4   
+                                        next -> 2,  stack = [7, 3]
+                                        next -> 3,  stack = [7, 4]
+                                        next -> 4,  stack = [7]
+                                        next -> 7,  stack = [15]
+    """
+    
+    def __init__(self, root: Optional[TreeNode]):
+        self.stack = []
+        self.add_left(root)
+        self.root = root
+
+    def add_left(self, node):
+        if not node:
+            return 
+        self.stack.append(node)
+        self.add_left(node.left)
+
+    def next(self) -> int:
+        smallest = self.stack.pop()
+        self.add_left(smallest.right)
+        return smallest.val
+        
+    def hasNext(self) -> bool:
+        return len(self.stack) > 0
+
+
+class BSTIterator:
+    """
+        DFS and store everything during initialize. small tree ok, big tree will be issue
+    """
+    def __init__(self, root: TreeNode):
+        self.stack = []
+        self.dfs(root)
+    
+    def dfs(self, node):
+        if not node:
+            return 
+        self.dfs(node.left)
+        self.stack.append(node.val)
+        self.dfs(node.right)
+        
+
+    def next(self) -> int:
+        return self.stack.pop(0)
+
+    def hasNext(self) -> bool:
+        return len(self.stack) > 0

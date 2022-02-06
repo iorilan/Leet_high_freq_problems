@@ -1,0 +1,39 @@
+class Solution:
+    """
+        Greedy: (no need back tracking)
+        #1 decide if can flip a row : after flip ,the value should be bigger
+        #2 decide if can flip column: after flip, the count of one should increase
+    """
+    def matrixScore(self, grid: List[List[int]]) -> int:
+        g = grid
+        row, col = len(g), len(g[0])
+        
+        def can_flip(g, r):
+            col = len(g[0])
+            v1 = tuple(g[r])
+            v2 = tuple([1 if g[r][c] == 0 else 0 for c in range(col)])
+            return v2 > v1
+        
+        def can_flip_c(g, c):
+            row = len(g)
+            count_one = 0
+            for r in range(row):
+                if g[r][c] == 1:
+                    count_one +=1
+            count_zero = row-count_one
+            return count_one < count_zero
+
+        for r in range(row):
+            if can_flip(g, r):
+                for c in range(col):
+                    g[r][c] = 1 if g[r][c] == 0 else 0
+        for c in range(col):
+            if can_flip_c(g, c):
+                for r in range(row):
+                    g[r][c] = 1 if g[r][c] == 0 else 0
+        
+        res = 0
+        for r in range(row):
+            s = ''.join(map(str, g[r]))
+            res += int(s, 2)
+        return res

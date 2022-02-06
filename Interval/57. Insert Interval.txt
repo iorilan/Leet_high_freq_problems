@@ -1,0 +1,56 @@
+def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
+    """ 
+        For below intervals 
+        |---|<gap>|---|..|---|
+Think about the Start position
+Case1     |----..                   # fall into some interval
+Case2 |---..                        # smaller than the first interval start
+Case3         |--..                 # fall into some gap
+Case4                          |--- # bigger than the last interval end
+
+Same 4 cases could happen to end position
+Case1  ..--|                        # fall into some interval.
+Case2 -|                            # smaller than the first interval start.
+Case3      ..--|                    # fall into some gap between elements.
+Case4                        ---|   # bigger than the last end.
+Then just based on the 4 Cases get the start and end merge index do merge and insert
+    """
+    if not intervals:
+        return [newInterval]
+    
+    new_s, new_e = newInterval
+    merge_start = merge_end = -1 # start and end index to be merged
+    merge_start_val = merge_end_val = -1 # start and end val of the new interval
+    
+    if new_s > intervals[-1][1]: # Start : Case4. just append at end
+        return intervals+ [newInterval]
+    if new_e < intervals[0][0]: #End: Case2. just insert at 0
+        return [newInterval] + intervals
+    
+    if new_s < intervals[0][0]: #Start : Case2. merge from 0
+        merge_start = 0
+        merge_start_val = new_s
+    if new_e> intervals[-1][1]: #end : Case4. merge until last one
+        merge_end = len(intervals)-1
+        merge_end_val = new_e
+    
+    for i in range(0, len(intervals)):
+        # Start : Case1.
+        if new_s >= intervals[i][0] and new_s <= intervals[i][1]:
+            merge_start = i
+            merge_start_val = intervals[i][0]
+        # Start : Case3
+        if i>0 and new_s> intervals[i-1][1] and new_s < intervals[i][0]:
+            merge_start = i
+            merge_start_val = new_s
+        # End : Case1
+        if new_e >= intervals[i][0] and new_e <= intervals[i][1]:
+            merge_end = i
+            merge_end_val = intervals[i][1]
+        # End : Case3
+        if i>0 and new_e> intervals[i-1][1] and new_e < intervals[i][0]:
+            merge_end = i-1
+            merge_end_val = new_e
+    intervals[merge_start:merge_end+1] = [[merge_start_val, merge_end_val]]
+    
+    return intervals

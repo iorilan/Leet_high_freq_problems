@@ -1,0 +1,13 @@
+def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+    arr = sorted(nums)
+    res= []
+    
+    def sub(idx, cur):
+        res.append(cur[:])
+        cache = set()
+        for i in range(idx, len(arr)):
+            if arr[i] not in cache:
+                cache.add(arr[i])
+                sub(i+1, cur+ [arr[i]] )
+    sub(0, [])
+    return res
