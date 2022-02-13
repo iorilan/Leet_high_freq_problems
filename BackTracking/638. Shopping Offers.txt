@@ -1,0 +1,25 @@
+def shoppingOffers(self, price: List[int], special: List[List[int]], needs: List[int]) -> int:
+        
+    def can_use(needs, s):
+        # rule : can not buy any item more than needed
+        still_need = tuple([t1-t2 for t1,t2 in zip(needs, s[:-1])])
+        valid = all(x>=0 for x in still_need) # still_need must be >= 0
+        return valid, still_need
+    
+    @cache
+    def dfs(needs, price, special):
+        if all([n == 0 for n in needs]):
+            return 0
+        
+        # try without voucher
+        res = sum([n * p for n,p in zip(needs, price)])
+        for s in special: # try use every voucher
+            ok, still_need = can_use(needs, s)
+            if ok:
+                r = dfs(still_need, price, special) + s[-1]
+                if r < res:
+                    res = r
+        return res
+    # convert to tuple for cache
+    best = dfs(tuple(needs), tuple(price), tuple([tuple(s) for s in special]))
+    return best

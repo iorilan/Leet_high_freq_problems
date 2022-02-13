@@ -1,0 +1,17 @@
+def largestValues(self, root: Optional[TreeNode]) -> List[int]:
+    if not root:
+        return []
+    res=[]
+    q= [root]
+    while q :
+        child=[]
+        if q:
+            res.append(max(map(lambda x:x.val, q)))
+        while q:
+            n = q.pop(0)
+            if n.left:
+                child.append(n.left)
+            if n.right:
+                child.append(n.right)
+        q=child
+    return res

@@ -1,0 +1,19 @@
+def serialize(self, root: TreeNode) -> str:
+    """Encodes a tree to a single string.
+    """
+    if not root:
+        return 'None'
+    return  f'({root.val}, {self.serialize(root.left)}, {self.serialize(root.right)})'
+
+def deserialize(self, data: str) -> TreeNode:
+    """Decodes your encoded data to tree.
+    """
+    return self.des(eval(data))
+
+def des(self, node)-> TreeNode:
+    if node == None:
+        return None
+    n, left, right = node
+    n = TreeNode(n)
+    n.left, n.right = self.des(left), self.des(right)
+    return n

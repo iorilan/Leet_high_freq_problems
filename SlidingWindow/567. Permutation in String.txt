@@ -1,0 +1,20 @@
+def checkInclusion(self, s1: str, s2: str) -> bool:
+    start, end = 0,0
+    count = defaultdict(int)
+    count_s1 = Counter(s1)
+    while end < len(s2):
+        c = s2[end]
+        if c not in count_s1:
+            count.clear()
+            end+=1
+            start = end
+            continue
+        count[c]+=1
+        while count[c] > count_s1[c]:
+            count[s2[start]]-=1
+            start+=1
+        if end-start+1 == len(s1):
+            return True
+        end+=1
+        
+    return False

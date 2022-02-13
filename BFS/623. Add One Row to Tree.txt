@@ -1,0 +1,39 @@
+def addOneRow(self, root: TreeNode, val: int, depth: int) -> TreeNode:
+    """
+        Case1 : insert at root 
+        Case2 : insert at last row
+        Case3 : insert betwwn first and last row
+    """
+    if not root:
+        return []
+    
+    if depth == 1:              # Case1
+        return TreeNode(val, root)
+    q = [root]
+    last_row = []
+    d=1
+    def insert(n, val):
+        left, right = n.left, n.right #original left and right
+        n.left = TreeNode(val, left=left) #left=new_node, new_node'left = original left
+        n.right = TreeNode(val, right=right)#right=new_node, new_node'right = original right
+        return n
+    while q:
+        if d == depth-1:        # Case3
+            for n in q:
+                n=insert(n, val)
+            return root
+        else:
+            child = []
+            while q:
+                n = q.pop(0)
+                if n.left:
+                    child.append(n.left)
+                if n.right:
+                    child.append(n.right)
+            q = child
+            if q:
+                last_row = q
+        d+=1
+    for n in last_row:          # Case2
+        n=insert(n, val)
+    return root

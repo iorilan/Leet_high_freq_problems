@@ -1,0 +1,52 @@
+1. count the num of DFS
+def findCircleNum(self, isConnected: List[List[int]]) -> int:
+    graph = defaultdict(list)
+    for i in range(len(isConnected)):
+        for j in range(i+1, len(isConnected)):
+            if isConnected[i][j] == 1:
+                graph[i].append(j)
+                graph[j].append(i)
+    
+    def dfs(n, graph, visited):
+        if n in visited:
+            return
+        visited.add(n)
+        nexts = graph.get(n, [])
+        for n1 in nexts:
+            dfs(n1, graph, visited)
+    
+    visited = set()
+    res = 0
+    for i in range(len(isConnected)):
+        if i not in visited:
+            res += 1
+            dfs(i, graph, visited)
+    return res
+
+2. UnionFind
+class UF:
+    def __init__(self, isConnected):
+        self.parent = {i:i for i in range(0, len(isConnected))}
+        
+    def find(self, n): # get ancestor of node
+        p = self.parent[n]
+        if p == n:
+            return p
+        return self.find(p)
+
+    def union(self, n1 ,n2): #use lower ancestor as common ancestor
+        p1 = self.find(n1)
+        p2 = self.find(n2)
+        if p1 != p2:
+            self.parent[p1]=self.parent[p2]=min(p1, p2)
+
+class Solution:
+    def findCircleNum(self, isConnected: List[List[int]]) -> int:
+        uf = UF(isConnected)
+        for i in range(0, len(isConnected)):
+            for j in range(i+1, len(isConnected)):
+                if isConnected[i][j] == 1:
+                    uf.union(i, j)
+        
+        # number of ancestors is the answer 
+        return len({uf.find(i) for i in range(len(isConnected))})

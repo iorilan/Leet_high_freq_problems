@@ -1,0 +1,22 @@
+def minMutation(self, start: str, end: str, bank: List[str]) -> int:
+    def get_nexts(s, bank):
+        res = []
+        for b in bank:
+            if len([b[i] for i in range(0, len(b)) if b[i] != s[i]]) == 1:
+                res.append(b)
+        return res
+    q = [start]
+    res=0
+    visited=set()
+    while q:
+        if end in q:
+            return res
+        nexts = []
+        while q:
+            v=q.pop(0)
+            if v not in visited:
+                visited.add(v)
+                nexts.extend(get_nexts(v, bank))
+        q= nexts
+        res+=1
+    return -1

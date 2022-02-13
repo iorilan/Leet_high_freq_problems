@@ -1,0 +1,46 @@
+def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
+    rows, cols = len(heights), len(heights[0])
+    """
+        start from [pacific boarder positions] and [atlantic border positions] as q
+        do BFS when neighbor >= current add into [next nodes]
+		track visited (also can override matrix cell value)
+    """
+    def next_nodes(r, c, rows, cols, h, v):
+        res=[]
+        for r1, c1 in [(-1,0),(1,0),(0,-1),(0,1)]:
+            r2, c2 = r+r1 , c+c1
+            reach_border = r2 < 0 or r2 == rows or c2 < 0 or c2 == cols
+            if reach_border or (r2, c2) in v or h[r2][c2] < h[r][c]:
+                continue
+            v.add((r2,c2))
+            res.append((r2, c2))
+
+        return res
+    
+    visited=set()
+    res_pacific = set()
+	# 1. BFS find out nodes can flow into pacific
+    # pacific border positions
+    p = [(0, c) for c in range(0, cols)]+[(r, 0) for r in range(1, rows)]
+    while p :
+        nexts=[]
+        while p:
+            r,c = p.pop(0)
+            res_pacific.add((r,c))
+            nexts.extend(next_nodes(r,c,rows,cols, heights, visited))
+        p=nexts
+	#2. BFS find nodes can flow into atlantic
+    # atlantic border positions
+    a = [(r, cols-1) for r in range(0, rows)]+[(rows-1, c) for c in range(0, cols-1)]
+    visited=set()
+    res_atlantic=set()
+    while a:
+        nexts=[]
+        while a:
+            r,c = a.pop(0)
+            res_atlantic.add((r,c))
+            nexts.extend(next_nodes(r,c,rows,cols, heights, visited))
+        a=nexts
+
+    valid = res_atlantic & res_pacific
+    return [[r,c] for r, c in valid]

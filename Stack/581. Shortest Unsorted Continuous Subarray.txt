@@ -1,0 +1,14 @@
+def findUnsortedSubarray(self, nums: List[int]) -> int:
+    s1 = []
+    l = len(nums)
+    for i in range(0, len(nums)):
+        while s1 and nums[s1[-1]] > nums[i]:
+            l=min(l, s1.pop() )
+        s1.append(i)
+    r = 0
+    s2 = []
+    for j in range(len(nums)-1,-1,-1):
+        while s2 and nums[s2[-1]] < nums[j]:
+            r = max(r, s2.pop() )
+        s2.append(j)
+    return max(r-l+1, 0)

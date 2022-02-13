@@ -1,0 +1,39 @@
+def findMinArrowShots(self, points: List[List[int]]) -> int:
+    """ 
+        Sort the array with (bottom, top) and 
+        looping through the balloons: As long as next's bottom <= current top
+        if not, need another shot and start with new balloon
+        e.g. 
+        [2,5], [0,7], [3,4]
+        Shoot at 3 can finish all
+        8               
+        7   ---top
+        6               
+        5               ---top
+        4                               ---top
+        3                               ---bottom j+1
+        2               ---bottom j
+        1
+        0   ---bottom  i
+            bottom=0       bottom=2     bottom=3
+            top=7          top=5        top=4   ...
+    """
+    points.sort(key=lambda x:(x[0],x[1]))
+    i=0
+    res=1
+    bottom, top = points[0]
+    while i < len(points):
+        j = i+1
+        # find all next balloons bottom <= top
+        while j< len(points) and points[j][0] <= top:
+            top = min(points[j][1], top)
+            j+=1
+        # start with next balloon
+        if j < len(points):
+            res+=1
+            i = j
+            bottom, top = points[i]
+            j = i+1
+        else:
+            break
+    return res

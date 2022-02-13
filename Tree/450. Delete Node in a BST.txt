@@ -1,0 +1,20 @@
+def deleteNode(self, root: Optional[TreeNode], key: int) -> Optional[TreeNode]:
+    def right_most(node):
+        if not node:
+            return None
+        return right_most(node.right) or node
+    def del_n(n, k):
+        if not n:
+            return None
+        if n.val == k:
+            if not n.left:
+                return n.right
+            else:
+                left_max = right_most(n.left)
+                left_max.right = n.right
+                return n.left
+        else:
+            n.left = del_n(n.left, k)
+            n.right = del_n(n.right, k)
+            return n
+    return del_n(root, key)

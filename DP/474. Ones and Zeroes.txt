@@ -1,0 +1,30 @@
+1. DFS + cache
+def findMaxForm(self, strs: List[str], m: int, n: int) -> int:
+    def inc_count(count , s):
+        zero = len([c for c in s if c == '0'])
+        return count[0] + zero, count[1] + len(s) - zero
+    
+    @cache
+    def find(cur, count, i, m, n):
+        if i == len(strs) or count[0] > m or count[1] > n:
+            return cur
+        
+        res = find(cur, count, i+1, m, n) # skip current string
+        new_count = inc_count(count, strs[i])
+        if new_count[0] <= m and new_count[1] <= n:
+            res = max(res, find(cur +1 , new_count, i+1, m, n)) # take current string
+            
+        return res
+    return find(0, (0, 0), 0,  m, n) #use tuple for cache
+
+2. bottom up DP
+def findMaxForm(self, strs: List[str], m: int, n: int) -> int:
+    dp = [[0] * (n + 1) for _ in range (m + 1)]
+    
+    for s in strs:
+        m1, n1 = s.count('0'), s.count('1')
+        for i in range(m, m1 - 1, -1):
+            for j in range(n, n1 - 1, -1):
+                dp[i][j] = max(dp[i][j], dp[i - m1][j - n1] + 1)
+    
+    return dp[m][n]

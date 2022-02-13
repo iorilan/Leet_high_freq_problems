@@ -1,0 +1,53 @@
+class Node:
+    def __init__(self, val=''):
+        self.val = val
+        self.children = []
+        self.End = False
+        
+    def __repr__(self):
+        return f'{self.val, [c.val for c in self.children]}'
+    
+class Trie:
+    def __init__(self):
+        self.root = Node()
+        
+    def add(self, word):
+        node = self.root
+        for w in word:
+            found = [c for c in node.children if c.val == w]
+            if found:
+                node = found[0]
+            else:
+                node.children.append(Node(w))
+                node = node.children[-1]
+        node.End=True
+
+    def find(self, word):
+        node = self.root
+        q = node.children
+        pref = ''
+        for w in word:
+            found = [c for c in q if c.val == w]
+            if found:
+                pref += w
+                end = [f for f in found if f.End]
+                if end:
+                    return pref
+                else:
+                    q = []
+                    for f in found:
+                        q.extend(f.children)
+            else:
+                return word
+        return word
+        
+class Solution:
+            
+    def replaceWords(self, dictionary: List[str], sentence: str) -> str:
+        t = Trie()
+        for d in dictionary:
+            t.add(d)
+        res = []
+        for s in sentence.split(' '):
+            res.append(t.find(s))
+        return ' '.join(res)

@@ -1,0 +1,16 @@
+def levelOrder(self, root: 'Node') -> List[List[int]]:
+    if not root:
+        return []
+    q= [root]
+    res=[]
+    res.append([root.val])
+    while q :
+        child=[]
+        while q:
+            n = q.pop(0)
+            if n.children:
+                child.extend(n.children)
+        if child:
+            res.append([x.val for x in child])
+        q=child
+    return res

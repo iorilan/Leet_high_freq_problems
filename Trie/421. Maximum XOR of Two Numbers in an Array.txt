@@ -1,0 +1,67 @@
+class Node:
+    def __init__(self):
+        self.one = None
+        self.zero = None
+        
+class Trie:
+    def __init__(self):
+        self.root = Node()
+    
+    def add(self, num):
+        n = self.root
+        for i in range (31, -1, -1):
+            nexts = None
+            val = (num & 1 << i )
+            matched = val and n.one or not val and n.zero
+            if matched:
+                n = n.one if val else n.zero
+            else:
+                if val:
+                    n.one = Node()
+                    n = n.one
+                else:
+                    n.zero = Node()
+                    n = n.zero
+    
+    def find_path(self, num):
+        """
+        [3,10,5,25,2,8] convert to bin => [00011, 01010, 00101, 11001, 00010, 01000]
+        get Trie tree :
+        
+                                        root
+                                  |-----    ------|     
+                                  0               1
+                          |-------|-------|       |
+                          0               1       1
+                         / \              |       |
+                        0   1             0       0
+                        |   |            / \      |
+                        1   0           0   1     0
+                       / \  |           |   |     |
+                      0   1 1           0   0     1
+        search each node. if node val != current val. digit=1 else digit=0
+        """
+        n = self.root
+        res=0
+        for i in range (31, -1, -1):
+            val = 1 if num & 1 << i else 0
+            matched = n.one if not val else n.zero
+            if matched:
+                res += 1 << i
+                n = matched
+            else:
+                n = n.one if val else n.zero
+        return res
+    
+        
+class Solution:
+    def findMaximumXOR(self, nums: List[int]) -> int:
+        t = Trie()
+        for n in nums:
+            t.add(n)
+        
+        res = 0
+        for n in nums:
+            p = t.find_path(n)
+            res = max(p ,res)
+        return res

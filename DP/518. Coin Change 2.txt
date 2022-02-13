@@ -1,0 +1,40 @@
+1. DFS + Cache (Backtracking + Cache will be TLE)
+def change(self, amount: int, coins: List[int]) -> int:
+    coins.sort(reverse=True)
+    @cache
+    def ways(a, coins):
+        if a < 0 or not coins:
+            return 0
+        if a == 0:
+            return 1
+        # <Include current coin > + <without current coin>
+        return ways(a-coins[0], coins) + ways(a, coins[1:])
+    return ways(amount, tuple(coins))
+2. DP
+def change(self, amount: int, coins: List[int]) -> int:
+    """ 
+        Explaination :
+        When only have coin 1, so
+        coins: (1), r(amount)=ways to change amount
+        r(0): [empty] # 1 way
+        r(1): [1] # 1 way
+        r(2): [11] # 1 way 
+        ...
+        r(5): [11111] # 1 way
+        now add one new coin 2. 
+        so now have coins: (1,2)
+        r(1) = res[1]
+        r(2) = res[11, 2] = [11] + 2*[empty] =[11] + 2*r(0)
+        r(3) = res[111, 12]= [111] + 2*[1] = [111] + 2*r(1)
+        r(4) = res[1111, 112, 22] = [1111] + 2* res[11,2]=[1111] + 2* r(2)
+        r[5] = res[11111, 122, 1112] = [11111] + 2* res[12,111]= [11111]+ 2* r(3) 
+        ...
+        so for every new coin added ,
+        r[amount] = r[amount] + r[amount-coin_value]
+    """
+    res = [0] * (amount+1)
+    res[0] = 1 # have 0 coin can exchange nothing. also consider 1 way
+    for c in coins:
+        for a in range(c, amount+1):
+            res[a] += res[a-c]
+    return res[-1]

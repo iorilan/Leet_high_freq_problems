@@ -1,0 +1,36 @@
+1. Presum + DFS
+def pathSum(self, root, target):
+    """
+        Maintein a pre sum array while DFS
+                     10[10]
+                    /   \
+            [15,5] 5      -3[7, -3]
+                  / \        \
+        [18,8,3] 3   2[17,7,2] 11 [18, 8, 11]
+                / \   \
+    [21,11,6,3]3  -2   1 [18,8,3,1]
+    """
+    res=0
+    def p(n, pre_s, t):
+        nonlocal res
+        if not n :
+            return
+        pre_s = pre_s + [0]
+        for i in range(0, len(pre_s)):
+            pre_s[i] += n.val
+            if pre_s[i] == t:
+                res+=1
+        p(n.left, pre_s, t)
+        p(n.right, pre_s, t)
+    p(root, [], target)
+    return res
+
+2. DFS
+def pathSum(self, root, target):
+    def sum_up(n, target):
+        if not n : return 0
+        return int(n.val == target) + sum_up(n.left, target-n.val) + sum_up(n.right, target-n.val)
+    
+    if root:
+        return sum_up(root, target) + self.pathSum(root.left, target) + self.pathSum(root.right, target)
+    return 0

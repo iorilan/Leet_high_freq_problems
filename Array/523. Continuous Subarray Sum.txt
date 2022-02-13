@@ -1,0 +1,22 @@
+def checkSubarraySum(self, nums: List[int], k: int) -> bool:
+    """
+    nums= [23, 2, 4, 6, 7], k=6
+    sum    23  25 29 35 42
+    mod 0  5   1  5  5  0  
+           |---6--|     # 29-23 = 6
+           |---12----|  # 35-23 = 12
+    """
+    if len(nums) < 2:
+        return False
+    mod = {0:-1}
+    s = 0
+    for i,n in enumerate(nums):
+        s += n
+        m = s%k
+        if m in mod :
+            if i-mod[m]>1:
+                return True
+        else:
+            mod[m]=i
+        
+    return False

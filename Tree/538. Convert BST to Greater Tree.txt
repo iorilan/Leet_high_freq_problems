@@ -1,0 +1,11 @@
+def convertBST(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+    def convert(n, p): # p: pre_sum of parent
+        if not n:
+            return 0
+        right = convert(n.right, p)  # go right, pass pre sum of parent
+        left = convert(n.left, n.val+right+p) # go left, pass current+right+pre sum of parent
+        s = n.val # keep original value of current
+        n.val += right + p
+        return s + left + right
+    convert(root, 0)
+    return root

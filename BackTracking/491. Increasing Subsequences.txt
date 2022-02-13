@@ -1,0 +1,13 @@
+def findSubsequences(self, nums: List[int]) -> List[List[int]]:
+    res = set()
+    @cache
+    def find(start, cur):
+        nonlocal res, nums
+        if len(cur) > 1:
+            res.add(cur)
+        for i in range(start, len(nums)):       # try start from event element
+            if not cur or cur[-1] <= nums[i]:   # if increasing continue
+                find(i+1, cur + (nums[i],))
+    
+    find(0, ())
+    return res

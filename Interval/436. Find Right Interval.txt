@@ -1,0 +1,26 @@
+def findRightInterval(self, intervals: List[List[int]]) -> List[int]:
+    # keep the original sequence
+    idx={tuple(intervals[i]):i for i in range(0, len(intervals))}
+    
+    # {start: end}
+    start_end = {}
+    for s,e in intervals:
+        start_end[s] = e
+    
+    arr = sorted(intervals, key=lambda x : (x[0],x[1]))
+    vals={}
+    for i in range(0, len(arr)-1):
+        # for each 'end' search in the next intervals see if it == any 'start'
+        j=arr[i][1]
+        while j < arr[-1][0]:
+            if j in start_end:
+                break
+            else:
+                j+=1
+        
+        if j in start_end:
+            vals[tuple(arr[i])] = idx[(j, start_end[j])]
+    res=[]
+    for i in intervals:
+        res.append(vals.get(tuple(i), -1))
+    return res

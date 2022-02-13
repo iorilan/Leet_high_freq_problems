@@ -1,0 +1,36 @@
+def updateBoard(self, board: List[List[str]], click: List[int]) -> List[List[str]]:
+    row, col = len(board), len(board[0])
+    def valid(r, c, row, col):
+        if r < 0 or c < 0 or r == row or c == col:
+            return False
+        return True
+    
+    def dirs():
+        return [(0, 1),(1, 0), (0, -1), (-1, 0), (1, -1), (-1, 1), (1,1), (-1,-1)]
+    
+    def mines(board, r, c, row, col):
+        res=0
+        for d in dirs():
+            if valid(r+d[0], c+d[1], row, col) and board[r+d[0]][c+d[1]] == 'M':
+                res+=1
+        return res
+    
+    def mark(board, r, c, row, col):
+        if not valid(r, c, row, col):
+            return 
+        if board[r][c] != 'E':
+            return
+        num_mines = mines(board, r, c, row, col)
+        if num_mines > 0:
+            board[r][c] = str(num_mines)
+        else:
+            board[r][c] = 'B'
+            for d in dirs():
+                mark(board, r+d[0], c+d[1], row, col)
+            
+    if board[click[0]][click[1]] == 'M':
+        board[click[0]][click[1]] = 'X'
+        return board
+    
+    mark(board, click[0], click[1], row, col)
+    return board

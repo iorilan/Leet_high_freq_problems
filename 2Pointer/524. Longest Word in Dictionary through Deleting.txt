@@ -1,0 +1,19 @@
+def findLongestWord(self, s: str, dictionary: List[str]) -> str:
+    d = sorted(dictionary, reverse=True, key= lambda x: len(x))
+    def can_form(str1, word):
+        i = 0
+        j = 0
+        while i < len(word):
+            while j < len(str1) and word[i] != str1[j]:
+                j+=1
+            if j == len(str1):
+                break
+            i+=1
+            j+=1
+        return i == len(word)
+    res=''
+    for w in d:
+        if can_form(s, w) and \
+            (len(w) > len(res) or len(w) == len(res) and w < res):
+            res=w
+    return res

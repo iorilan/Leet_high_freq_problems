@@ -1,0 +1,15 @@
+def findBottomLeftValue(self, root: Optional[TreeNode]) -> int:
+    q = [root]
+    res = root.val
+    while q:
+        child = []
+        if q:
+            res = q[0].val
+        while q:
+            n = q.pop(0)
+            if n.left:
+                child.append(n.left)
+            if n.right:
+                child.append(n.right)
+        q=child
+    return res

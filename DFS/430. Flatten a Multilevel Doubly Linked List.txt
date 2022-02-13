@@ -1,0 +1,19 @@
+def flatten(self, head: 'Optional[Node]') -> 'Optional[Node]':
+    # 1. populate the tree into array : current, child, next
+    def get_val(n):
+        if not n :
+            return []
+        return [n.val]+ get_val(n.child) + get_val(n.next)
+    vals = get_val(head)
+    
+    if not vals:
+        return None
+    # 2. convert the array into link list
+    h2 = Node(vals.pop(0))
+    res=h2
+    while vals:
+        h2.next = Node(vals.pop(0))
+        h2.next.prev=h2
+        h2 = h2.next
+        
+    return res

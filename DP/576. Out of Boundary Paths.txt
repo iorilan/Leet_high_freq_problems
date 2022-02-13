@@ -1,0 +1,75 @@
+1. DFS + Cache (Very straight forward and readable)
+def findPaths(self, m: int, n: int, maxMove: int, startRow: int, startColumn: int) -> int:
+    @cache
+    def find(r, c, m, n, move):
+        if r < 0 or c < 0 or r == m or c == n:  # crossed boundary
+            return 1
+        if move == 0:                           # no move left
+            return 0
+        
+        # try every direction
+        return find(r-1,c, m,n, move-1) \
+                +find(r, c+1, m,n, move-1) \
+                +find(r+1,c, m,n, move-1) \
+                +find(r, c-1, m,n, move-1)
+    
+    return find(startRow, startColumn, m, n, maxMove)%(pow(10,9)+7)
+
+2. DP
+def findPaths(self, m: int, n: int, maxMove: int, startRow: int, startColumn: int) -> int:
+    """
+        move = 0  ,grid = 2*2
+          1 1
+        1 - - 1
+        1 - - 1
+          1 1
+          
+        >: throw from right, <: throw from left, v: throw from top, ^: throw from bottom
+        move = 1. Think reversely , how many ways can throw the ball from outside :
+          1 1        
+          v v             1 1
+        1>- -<1     ==> 1 2 2 1
+        1>- -<1         1 2 2 1
+          ^ ^             1 1
+          1 1         
+          
+        move = 2. ball could come from outside, or from 2 other places
+           1   1        
+           v   v                 1      1               1  1
+        1> 2v> <2v 1   =>  1 1+1+2+2 1+1+2+2  1  =>   1 6  6 1
+        1> 2^> <2^ 1       1 1+1+2+2 1+1+2+2  1       1 6  6 1
+           ^   ^                 1      1               1  1
+           1   1
+           
+        Formular :
+            r : row, c : column, m: move
+            result of position <r,c, move> = result of all directions <move-1>, which is :
+            dp[m][r][c] = dp[m-1][r-1][c]+dp[m-1][r+1][c]+dp[m-1][r][c-1]+dp[m-1][r][c+1]
+    """
+    row, col = m, n
+    dp = [[]] * (maxMove+1)
+    for move in range(maxMove+1):
+        dp[move] = [[]]*(row+2)
+        for r in range(row+2):
+            dp[move][r] = [0]*(col+2)
+    
+    # for every move, border case always 1
+    for r in range(row+2):
+        for move in range(maxMove):
+            dp[move][r][0] = 1
+            dp[move][r][col+1] = 1
+    for c in range(col+2):
+        for move in range(maxMove):
+            dp[move][0][c] = 1
+            dp[move][row+1][c] = 1
+    
+    mod = pow(10,9)+7
+    for move in range(1, maxMove+1):
+        for r in range(1, row+1):
+            for c in range(1, col+1):
+                dp[move][r][c] = ( dp[move-1][r-1][c] \
+                                +dp[move-1][r+1][c] \
+                                +dp[move-1][r][c-1] \
+                                +dp[move-1][r][c+1] ) % mod
+        
+    return dp[maxMove][startRow+1][startColumn+1]

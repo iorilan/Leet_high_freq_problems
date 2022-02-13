@@ -1,0 +1,24 @@
+def findSubstringInWraproundString(self, p: str) -> int:
+    """
+    use [a-z] array to Track the max length until each char
+    Sample. p=abzabd
+        a  b   z   a   b   d
+      a:1  
+           a:1
+           b:2
+                   a:2 # because za length = 2
+                   b:2
+                   z:1
+                        b:3 len(zab)=3. no need count previous ab (it is dup)
+                        ...
+    """
+    count = {chr(ord('a')+i):0 for i in range(0,26)}
+    count [p[0]] = 1
+    c=1
+    for i in range(1, len(p)):
+        if ord(p[i]) - ord(p[i-1]) in (1, -25):
+            c+=1
+        else:
+            c=1
+        count[p[i]] = max(c, count[p[i]])
+    return sum(v for v in count.values())

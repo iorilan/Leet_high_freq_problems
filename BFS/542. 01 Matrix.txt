@@ -1,0 +1,32 @@
+def updateMatrix(self, mat: List[List[int]]) -> List[List[int]]:
+    row, col = len(mat), len(mat[0])
+    # push all 0 input q do BFS
+    q = []
+    for r in range(row):
+        for c in range(col):
+            if mat[r][c] == 0:
+                q.append((r,c))
+    
+    res = [[-1]*col for _ in range(row)]
+    def get_next(r,c, row, col):
+        if r < 0 or c < 0 or r == row or c == col or res[r][c] >= 0:
+            return None
+        return (r,c)
+    
+    dis = 0
+    while q :
+        nexts = set()
+        for r,c in q:
+            res[r][c] = dis
+        while q :
+            r,c = q.pop()
+            n = [get_next(r-1,c, row, col), \
+                 get_next(r+1,c, row, col), \
+                 get_next(r,c-1, row, col), \
+                 get_next(r,c+1, row, col)]
+            n = {x for x in n if x}
+            if n:
+                nexts |= n
+        q = nexts
+        dis += 1
+    return res

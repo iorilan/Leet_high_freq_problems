@@ -1,0 +1,29 @@
+def findDiagonalOrder(self, mat: List[List[int]]) -> List[int]:
+    d = 'r' # l: left-down, r: right-up
+    r,c =0,0
+    row, col = len(mat), len(mat[0])
+    res= []
+    while r<row and c<col:
+        res.append(mat[r][c])
+        if d == 'r':
+            if r > 0 and c<col-1: # keep moving up-right
+                r-=1
+                c+=1
+            elif c < col-1:       # reached top border
+                c+=1
+                d='l'
+            else:                 # reached right border
+                r+=1
+                d='l'
+        else:
+            if r< row-1 and c>0:  # keep moving left-down
+                r+=1
+                c-=1
+            elif r < row-1:       # reached left border
+                r+=1
+                d='r'
+            else:
+                c+=1              # reached bottom border
+                d='r'
+            
+    return res

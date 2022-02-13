@@ -1,0 +1,27 @@
+def nextGreaterElements(self, nums: List[int]) -> List[int]:
+    """
+    Use mono-stack track all element <= current :
+    and keep populating stack until current < stack top element
+    Sample :
+    
+    array:  a1, a2, a3, ...ai...an
+                            |
+            stack: a1>a2>a3 <= ai ? yes,
+            update res[a3] = ai
+            stack: a1>a2 <= ai ? no,
+            stack: a1>a2>ai, continue
+            ...
+    """
+    
+    stack = []
+    res={}
+    nums2 = nums*2  # handle circular
+
+    for i, n in enumerate(nums2):
+        while stack and nums2[stack[-1]] < n:
+            res[stack.pop()]=n
+        stack.append(i)
+            
+    while stack :
+        res[stack.pop()]=-1
+    return [n for idx, n in sorted(res.items(), key=lambda x:x[0]) if idx < len(nums)]

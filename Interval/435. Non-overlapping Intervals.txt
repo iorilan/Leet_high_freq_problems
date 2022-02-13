@@ -1,0 +1,18 @@
+def eraseOverlapIntervals(self, intervals: List[List[int]]) -> int:
+    arr = sorted(intervals, key=lambda x:(x[0], x[1]))
+    def overlap(i1 , i2):
+        return i1[1] > i2[0]
+    
+    def bigger_end(arr, i1, i2):
+        if arr[i1][1] > arr[i2][1]:
+            return i1
+        else:
+            return i2
+    i=0
+    while i < len(arr) -1:
+        if overlap(arr[i], arr[i+1]):
+            r = bigger_end(arr, i, i+1)
+            arr.remove(arr[r])
+        else:
+            i+=1
+    return len(intervals)-len(arr)

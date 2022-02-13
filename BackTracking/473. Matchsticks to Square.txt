@@ -1,0 +1,19 @@
+def makesquare(self, matchsticks: List[int]) -> bool:
+    @lru_cache(None)
+    def check(arr, cur, width, total):
+        if cur > width:
+            return False
+        if total == 0:   # success
+            return True
+        if cur == width: # finished one side. continue the other sides
+            return check(arr, 0, width, total - width)
+        # still constructing one side. backtracking check all possibilities
+        for i in range(0, len(arr)):
+            if check(arr[:i]+arr[i+1:], cur+arr[i], width, total):
+                return True
+        return False
+    s = sum(matchsticks)
+    if s % 4 != 0:
+        return False
+    l = s//4
+    return check(tuple(matchsticks), 0, l, s)

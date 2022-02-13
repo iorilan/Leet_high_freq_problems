@@ -1,0 +1,23 @@
+def findMaxLength(self, nums: List[int]) -> int:
+    """
+    track sum from begin to end .for same sum calculate length
+    0 : minus 1
+    1 : plus 1
+        0   0   1   0   0   0   1   1
+pre_s   -1  -2  -1  -2  -3  -4  -3  -2
+        <------->
+            <------->  
+                       <-------->
+            <----------------------->
+    """
+    pre_s=defaultdict(int)
+    pre_s[0]=-1 # handle [0 1]
+    res=0
+    s = 0
+    for i, n in enumerate(nums):
+        s += 1 if n == 1 else -1
+        if s not in pre_s:
+            pre_s[s] = i
+        else:
+            res = max(res, i-pre_s[s])
+    return res

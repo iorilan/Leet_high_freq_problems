@@ -1,0 +1,29 @@
+1. DFS
+def arrayNesting(self, nums: List[int]) -> int:
+    cache = defaultdict(int)
+    def chain(index, visited):
+        if index in visited:
+            return 0
+        visited.add(index)
+        if index in cache:
+            return cache[index]
+        cache[index] = 1+ chain(nums[index], visited)
+        return cache[index]
+    res=1
+    for i in range(0, len(nums)):
+        res = max(res, chain(i, set()))
+    return res
+
+2. Count every cycle length
+def arrayNesting(self, nums: List[int]) -> int:
+    visited = set()
+    res = 1
+    for i, n in enumerate(nums):
+        cycle_len = 0
+        x = n
+        while x not in visited:
+            visited.add(x)
+            cycle_len += 1
+            x = nums[x]
+        res = max(res, cycle_len)
+    return res

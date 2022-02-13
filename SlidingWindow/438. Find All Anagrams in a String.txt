@@ -1,0 +1,20 @@
+def findAnagrams(self, s: str, p: str) -> List[int]:
+    res=[]
+    cp = collections.Counter(p)
+    start = 0
+    end=0
+    c=defaultdict(int)
+    while end < len(s):
+        if s[end] not in cp:
+            start=end+1
+            end+=1
+            c=defaultdict(int)
+            continue
+        c[s[end]]+=1
+        if end-start==len(p):
+            c[s[start]]-=1
+            start+=1
+        if c == cp:
+            res.append(start)
+        end+=1
+    return res

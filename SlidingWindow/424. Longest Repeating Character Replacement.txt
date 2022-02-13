@@ -1,0 +1,15 @@
+def characterReplacement(self, s: str, k: int) -> int:
+    start, end = 0, 0
+    count={}
+    res=0
+    while end < len(s):
+        count.setdefault(s[end], 0)
+        count[s[end]]+=1
+        # change other characters and keep the max count char
+        while count and max(count.values())+k < end-start+1:
+            count[s[start]]-=1
+            start+=1
+        
+        res = max(end-start+1, res)
+        end+=1
+    return res

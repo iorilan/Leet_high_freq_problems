@@ -1,0 +1,15 @@
+def leastBricks(self, wall: List[List[int]]) -> int:
+    """
+        minimum crossed bricks = maximum crossed gaps
+    """
+    row = len(wall)
+    count_gap = defaultdict(int)
+    for r in range(0, row):
+        s = 0
+        col = len(wall[r])
+        for c in range(0, col-1):
+            s+= wall[r][c]
+            count_gap[s]+=1
+    if not count_gap:
+        return row
+    return row-max(count_gap.values())
